@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="Rent.Main">
+  <grid id="27dc6" binding="mainPanel" layout-manager="GridLayoutManager" row-count="10" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="20">
+    <margin top="20" left="20" bottom="20" right="20"/>
+    <constraints>
+      <xy x="20" y="20" width="804" height="817"/>
+    </constraints>
+    <properties/>
+    <border type="none">
+      <color color="-12828863"/>
+    </border>
+    <children>
+      <component id="253ab" class="javax.swing.JLabel">
+        <constraints>
+          <grid row="1" column="1" row-span="2" col-span="1" vsize-policy="2" hsize-policy="2" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <font name="AppleGothic" size="28" style="1"/>
+          <text value="Welcome back!"/>
+        </properties>
+      </component>
+      <component id="991d6" class="javax.swing.JButton" binding="carRegistrationButton" default-binding="true">
+        <constraints>
+          <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false">
+            <preferred-size width="800" height="100"/>
+            <maximum-size width="800" height="200"/>
+          </grid>
+        </constraints>
+        <properties>
+          <background color="-11710382"/>
+          <font size="20"/>
+          <hideActionText value="false"/>
+          <icon value="Rent/istockphoto-1083280078-612x612.png"/>
+          <text value="Car Registration"/>
+        </properties>
+      </component>
+      <component id="9fb18" class="javax.swing.JButton" binding="customerButton" default-binding="true">
+        <constraints>
+          <grid row="5" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <font size="20"/>
+          <icon value="Rent/customer-group-customers-forum-people-users-icon-2.png"/>
+          <text value="Customer"/>
+        </properties>
+      </component>
+      <component id="979e6" class="javax.swing.JButton" binding="rentalButton" default-binding="true">
+        <constraints>
+          <grid row="6" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <font size="20"/>
+          <icon value="Rent/475-4751747_lease-icon-free-png-and-svg-download-rental.png"/>
+          <text value="Rental"/>
+        </properties>
+      </component>
+      <component id="19313" class="javax.swing.JButton" binding="returnButton" default-binding="true">
+        <constraints>
+          <grid row="7" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <font size="20"/>
+          <icon value="Rent/car-return-driver-1.png"/>
+          <text value="Return"/>
+        </properties>
+      </component>
+      <component id="f9f2c" class="javax.swing.JButton" binding="logoutButton" default-binding="true">
+        <constraints>
+          <grid row="8" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <font size="20"/>
+          <icon value="Rent/339-3396821_png-file-svg-download-icon-logout-transparent-png.png"/>
+          <text value="Logout"/>
+        </properties>
+      </component>
+      <vspacer id="52245">
+        <constraints>
+          <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+        </constraints>
+      </vspacer>
+      <vspacer id="f94ca">
+        <constraints>
+          <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false">
+            <preferred-size width="-1" height="10"/>
+          </grid>
+        </constraints>
+      </vspacer>
+      <vspacer id="fc88">
+        <constraints>
+          <grid row="9" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+        </constraints>
+      </vspacer>
+      <hspacer id="eeb55">
+        <constraints>
+          <grid row="0" column="2" row-span="10" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+      </hspacer>
+      <hspacer id="87a93">
+        <constraints>
+          <grid row="0" column="0" row-span="10" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+      </hspacer>
+    </children>
+  </grid>
+</form>
