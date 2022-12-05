@@ -5,6 +5,7 @@ import javax.swing.table.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class CarRegistration extends JFrame{
@@ -13,7 +14,7 @@ public class CarRegistration extends JFrame{
     private JTextField carRegField;
     private JTextField carMakeField;
     private JTextField carModelField;
-    private JTable table1;
+    private JTable table1, overload_table;
     private JLabel carRegNo;
     private JLabel carMake;
     private JLabel carModel;
@@ -46,26 +47,31 @@ public class CarRegistration extends JFrame{
             return temp_table;
         }
 
-    public CarRegistration(JTable overload_table){
-        ArrayList<Object[]> data = new ArrayList<>();
-        data.add(new Object[]{"Car_01", 2002, "AMG", "Yes"});
-        data.add(new Object[]{"Car_02", 2012, "AMG", "No"});
-
+    public CarRegistration(ArrayList<Object[]> data){
         carAvailableBox.addItem("Yes");
         carAvailableBox.addItem("No");
 
-        table1 = createTable(data);
-
         this.setLayout(new GridLayout(2, 1));
         this.setSize(900, 500);
-        scrollPane = new JScrollPane(table1);
-        if(overload_table != null)
+
+        if(data == null){
+            data = new ArrayList<Object[]>();
+            data.add(new Object[]{"Car_01", 2002, "AMG", "Yes"});
+            data.add(new Object[]{"Car_02", 2012, "AMG", "No"});
+
+            table1 = createTable(data);
+            scrollPane = new JScrollPane(table1);
+        }
+        else{
+            overload_table = createTable(data);
             scrollPane = new JScrollPane(overload_table);
+        }
 
         this.add(scrollPane);
         this.add(carRegPanel);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
+        ArrayList<Object[]> finalData = data;
         addButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -75,10 +81,9 @@ public class CarRegistration extends JFrame{
                 carAvailableString = carAvailableBox.getSelectedItem().toString();
 
                 Object[] row = {carRegNoString, carMakeInteger, carModelString, carAvailableString};
-                data.add(row);
-                JTable overload_table = createTable(data);
+                finalData.add(row);
                 dispose();
-                CarRegistration new_reg = new CarRegistration(overload_table);
+                CarRegistration new_reg = new CarRegistration(finalData);
             }
         });
     }
