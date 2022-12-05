@@ -20,18 +20,19 @@ public class Main extends JFrame {
         returnButton = new JButton();
         logoutButton = new JButton();
 
-        setContentPane(mainPanel);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setResizable(false);
-        pack();
         carRegistrationButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Hello World");
-                CarRegistration reg = new CarRegistration();
-                dispose();
+                CarRegistration reg = new CarRegistration(null);
+                hide();
                 reg.setVisible(true);
             }
         });
+
+        setContentPane(mainPanel);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setResizable(false);
+        pack();
     }
 }
