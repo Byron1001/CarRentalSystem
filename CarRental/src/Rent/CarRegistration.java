@@ -4,10 +4,9 @@ import javax.swing.*;
 import javax.swing.table.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
-public class CarRegistration extends JFrame implements MouseListener {
+public class CarRegistration extends JFrame implements MouseListener, ActionListener {
 
     private JPanel carRegPanel;
     private JTextField carRegField;
@@ -20,7 +19,7 @@ public class CarRegistration extends JFrame implements MouseListener {
     private JLabel carAvailable;
     private JComboBox carAvailableBox;
     private JButton addButton;
-    private JButton editButton;
+    private JButton modifyButton;
     private JButton deleteButton;
     private JButton cancelButton;
 
@@ -28,11 +27,17 @@ public class CarRegistration extends JFrame implements MouseListener {
     private String carRegNoString, carModelString;
     private int carMakeInteger;
     private String carAvailableString;
+    ArrayList<Object[]> finalData;
 
     private Object[] columns = {"Car Registration No.", "Make", "Model", "Available"};
 
     private JTable createTable(ArrayList<Object[]> data){
-            DefaultTableModel model = new DefaultTableModel();
+            DefaultTableModel model = new DefaultTableModel(){
+                @Override
+                public boolean isCellEditable(int row, int columns){
+                    return false;
+                }
+            };
             JTable temp_table = new JTable(model);
 
             for(int i = 0;i < columns.length;i++){
@@ -42,6 +47,8 @@ public class CarRegistration extends JFrame implements MouseListener {
             for(int i = 0; i < data.size();i++){
                 model.addRow(data.get(i));
             }
+
+            temp_table.getTableHeader().setFont(new Font("Times New Roman", Font.BOLD, 14));
 
             return temp_table;
         }
@@ -72,7 +79,7 @@ public class CarRegistration extends JFrame implements MouseListener {
         this.add(carRegPanel);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
-        ArrayList<Object[]> finalData = data;
+        finalData = data;
         addButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -88,6 +95,30 @@ public class CarRegistration extends JFrame implements MouseListener {
             }
         });
 
+        modifyButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int selectedIndex = table1.getSelectedRow();
+
+                carRegNoString = carRegField.getText();
+                carMakeInteger = Integer.parseInt(carMakeField.getText());
+                carModelString = carModelField.getText();
+                carAvailableString = carAvailableBox.getSelectedItem().toString();
+                Object[] row = {carRegNoString, carMakeInteger, carModelString, carAvailableString};
+                finalData.set(selectedIndex, row);
+                dispose();
+                CarRegistration new_reg = new CarRegistration(finalData);
+            }
+        });
+        deleteButton.addActionListener(this);
+        cancelButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+                Main new_main = new Main();
+                new_main.setVisible(true);
+            }
+        });
     }
 
     private void createUIComponents() {
@@ -95,6 +126,14 @@ public class CarRegistration extends JFrame implements MouseListener {
 
     public static void main(String[] args){
         CarRegistration reg = new CarRegistration(null);
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        int selectedIndex = table1.getSelectedRow();
+        finalData.remove(selectedIndex);
+        dispose();
+        CarRegistration new_reg = new CarRegistration(finalData);
     }
 
     @Override
