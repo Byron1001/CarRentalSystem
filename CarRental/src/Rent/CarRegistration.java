@@ -3,12 +3,11 @@ package Rent;
 import javax.swing.*;
 import javax.swing.table.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
-public class CarRegistration extends JFrame{
+public class CarRegistration extends JFrame implements MouseListener {
 
     private JPanel carRegPanel;
     private JTextField carRegField;
@@ -60,10 +59,12 @@ public class CarRegistration extends JFrame{
             data.add(new Object[]{"Car_02", 2012, "AMG", "No"});
 
             table1 = createTable(data);
+            table1.addMouseListener(this);
             scrollPane = new JScrollPane(table1);
         }
         else{
             overload_table = createTable(data);
+            overload_table.addMouseListener(this);
             scrollPane = new JScrollPane(overload_table);
         }
 
@@ -86,6 +87,7 @@ public class CarRegistration extends JFrame{
                 CarRegistration new_reg = new CarRegistration(finalData);
             }
         });
+
     }
 
     private void createUIComponents() {
@@ -93,5 +95,45 @@ public class CarRegistration extends JFrame{
 
     public static void main(String[] args){
         CarRegistration reg = new CarRegistration(null);
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        int selectedIndex = 0;
+        DefaultTableModel model = new DefaultTableModel();
+        if (e.getSource() == table1){
+            model = (DefaultTableModel) table1.getModel();
+            selectedIndex = table1.getSelectedRow();
+        }
+        else if(e.getSource() == overload_table){
+            model = (DefaultTableModel) overload_table.getModel();
+            selectedIndex = overload_table.getSelectedRow();
+        }
+        carRegField.setText((String) model.getValueAt(selectedIndex, 0));
+        carMakeField.setText(model.getValueAt(selectedIndex, 1).toString());
+        carModelField.setText((String) model.getValueAt(selectedIndex, 2));
+        carAvailableBox.setSelectedIndex(
+                (model.getValueAt(selectedIndex, 3) == "Yes")? 0 : ((model.getValueAt(selectedIndex, 3) == "No") ? 1 : -1)
+        );
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+
     }
 }
