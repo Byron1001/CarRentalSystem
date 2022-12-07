@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="Rent.Main">
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="Admin.Main">
   <grid id="27dc6" binding="mainPanel" layout-manager="GridLayoutManager" row-count="10" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="20">
     <margin top="20" left="20" bottom="20" right="20"/>
     <constraints>
@@ -30,7 +30,7 @@
           <background color="-11710382"/>
           <font size="20"/>
           <hideActionText value="false"/>
-          <icon value="Rent/istockphoto-1083280078-612x612.png"/>
+          <icon value="Admin/istockphoto-1083280078-612x612.png"/>
           <text value="Car Registration"/>
         </properties>
       </component>
@@ -40,7 +40,7 @@
         </constraints>
         <properties>
           <font size="20"/>
-          <icon value="Rent/customer-group-customers-forum-people-users-icon-2.png"/>
+          <icon value="Admin/customer-group-customers-forum-people-users-icon-2.png"/>
           <text value="Customer"/>
         </properties>
       </component>
@@ -50,7 +50,7 @@
         </constraints>
         <properties>
           <font size="20"/>
-          <icon value="Rent/475-4751747_lease-icon-free-png-and-svg-download-rental.png"/>
+          <icon value="Admin/475-4751747_lease-icon-free-png-and-svg-download-rental.png"/>
           <text value="Rental"/>
         </properties>
       </component>
@@ -60,7 +60,7 @@
         </constraints>
         <properties>
           <font size="20"/>
-          <icon value="Rent/car-return-driver-1.png"/>
+          <icon value="Admin/car-return-driver-1.png"/>
           <text value="Return"/>
         </properties>
       </component>
@@ -70,7 +70,7 @@
         </constraints>
         <properties>
           <font size="20"/>
-          <icon value="Rent/339-3396821_png-file-svg-download-icon-logout-transparent-png.png"/>
+          <icon value="Admin/339-3396821_png-file-svg-download-icon-logout-transparent-png.png"/>
           <text value="Logout"/>
         </properties>
       </component>

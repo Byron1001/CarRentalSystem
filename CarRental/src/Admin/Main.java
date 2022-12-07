@@ -1,4 +1,4 @@
-package Rent;
+package Admin;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -30,7 +30,7 @@ public class Main extends JFrame {
         customerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                CarRegistration reg = new CarRegistration(null);
+                CustomerRegistration reg = new CustomerRegistration(null);
                 hide();
                 reg.setVisible(true);
             }

@@ -1,6 +1,4 @@
-import Rent.Login;
-
-import javax.swing.*;
+import Admin.Login;
 
 public class Main {
     public static void main(String[] args) {

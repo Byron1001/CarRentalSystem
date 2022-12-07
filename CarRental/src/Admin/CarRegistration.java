@@ -1,4 +1,4 @@
-package Rent;
+package Admin;
 
 import javax.swing.*;
 import javax.swing.table.*;
@@ -6,17 +6,17 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 
-public class CarRegistration extends JFrame implements MouseListener, ActionListener {
+public class CarRegistration extends JFrame implements MouseListener {
 
     private JPanel carRegPanel;
-    private JTextField carRegField;
+    private JTextField carRegNoField;
     private JTextField carMakeField;
     private JTextField carModelField;
     private JTable table1, overload_table;
-    private JLabel carRegNo;
-    private JLabel carMake;
-    private JLabel carModel;
-    private JLabel carAvailable;
+    private JLabel carRegNoLabel;
+    private JLabel carMakeLabel;
+    private JLabel carModelLabel;
+    private JLabel carAvailableLabel;
     private JComboBox carAvailableBox;
     private JButton addButton;
     private JButton modifyButton;
@@ -83,7 +83,7 @@ public class CarRegistration extends JFrame implements MouseListener, ActionList
         addButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                carRegNoString =  carRegField.getText();
+                carRegNoString =  carRegNoField.getText();
                 carMakeInteger = Integer.parseInt(carMakeField.getText());
                 carModelString = carModelField.getText();
                 carAvailableString = carAvailableBox.getSelectedItem().toString();
@@ -100,7 +100,7 @@ public class CarRegistration extends JFrame implements MouseListener, ActionList
             public void actionPerformed(ActionEvent e) {
                 int selectedIndex = table1.getSelectedRow();
 
-                carRegNoString = carRegField.getText();
+                carRegNoString = carRegNoField.getText();
                 carMakeInteger = Integer.parseInt(carMakeField.getText());
                 carModelString = carModelField.getText();
                 carAvailableString = carAvailableBox.getSelectedItem().toString();
@@ -110,7 +110,15 @@ public class CarRegistration extends JFrame implements MouseListener, ActionList
                 CarRegistration new_reg = new CarRegistration(finalData);
             }
         });
-        deleteButton.addActionListener(this);
+        deleteButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int selectedIndex = table1.getSelectedRow();
+                finalData.remove(selectedIndex);
+                dispose();
+                CarRegistration new_reg = new CarRegistration(finalData);
+            }
+        });
         cancelButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -122,18 +130,6 @@ public class CarRegistration extends JFrame implements MouseListener, ActionList
     }
 
     private void createUIComponents() {
-    }
-
-    public static void main(String[] args){
-        CarRegistration reg = new CarRegistration(null);
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        int selectedIndex = table1.getSelectedRow();
-        finalData.remove(selectedIndex);
-        dispose();
-        CarRegistration new_reg = new CarRegistration(finalData);
     }
 
     @Override
@@ -148,11 +144,11 @@ public class CarRegistration extends JFrame implements MouseListener, ActionList
             model = (DefaultTableModel) overload_table.getModel();
             selectedIndex = overload_table.getSelectedRow();
         }
-        carRegField.setText((String) model.getValueAt(selectedIndex, 0));
+        carRegNoField.setText((String) model.getValueAt(selectedIndex, 0));
         carMakeField.setText(model.getValueAt(selectedIndex, 1).toString());
         carModelField.setText((String) model.getValueAt(selectedIndex, 2));
         carAvailableBox.setSelectedIndex(
-                (model.getValueAt(selectedIndex, 3) == "Yes")? 0 : ((model.getValueAt(selectedIndex, 3) == "No") ? 1 : -1)
+                (model.getValueAt(selectedIndex, 3).equals("Yes"))? 0 : ((model.getValueAt(selectedIndex, 3).equals("No")) ? 1 : -1)
         );
     }
 

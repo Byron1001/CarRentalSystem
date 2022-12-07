@@ -1,4 +1,4 @@
-package Rent;
+package Admin;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
