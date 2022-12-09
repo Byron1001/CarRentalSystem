@@ -115,6 +115,8 @@ public class RentalManagement extends JFrame{
 
                 calendar.add(Calendar.DATE, 1);
                 dueDateField.setText(format.format(calendar.getTime()));
+
+                customerIDField.setText(null);
             }
             @Override
             public void mousePressed(MouseEvent e) {
@@ -190,6 +192,12 @@ public class RentalManagement extends JFrame{
 
         rentButton = new JButton("Rent");
         infoPanel.add(rentButton);
+        rentButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
 
         deleteButton = new JButton("Delete");
         infoPanel.add(deleteButton);
