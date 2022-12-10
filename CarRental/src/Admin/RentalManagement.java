@@ -82,7 +82,8 @@ public class RentalManagement extends JFrame{
 
         ArrayList<Object[]> carData = new ArrayList<>();
         carData.add(new Object[]{"Car_01", 2002, "AMG", "Yes"});
-        carData.add(new Object[]{"Car_02", 2012, "AMG", "No"});
+        carData.add(new Object[]{"Car_02", 2012, "AMG", "Yes"});
+        carData.add(new Object[]{"Car_03", 2018, "Coupe", "Yes"});
 
         ArrayList<Object[]> rentData = new ArrayList<>();
         rentData.add(new Object[] {"Customer_01", "Car_02", "01-01-2022", "10-10-2022"});
@@ -195,12 +196,42 @@ public class RentalManagement extends JFrame{
         rentButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                Object[] data = {customerIDField.getText(), carIDField.getText(), rentalDateField.getText(), dueDateField.getText()};
+                int selectedIndex = availableTable.getSelectedRow();
+                rentData.add(data);
+                carData.remove(selectedIndex);
+                RentalManagement rental = null;
+                try {
+                    rental = new RentalManagement(carData, rentData);
+                } catch (ParseException ex) {
+                    throw new RuntimeException(ex);
+                }
+                dispose();
+                rental.setVisible(true);
             }
         });
 
         deleteButton = new JButton("Delete");
         infoPanel.add(deleteButton);
+        deleteButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int selectedIndex = rentTable.getSelectedRow();
+                Object carID = rentData.get(selectedIndex)[1];
+                for (Object[] car : carData) {
+                    if (car[0].equals(carID)) {
+                        car[3] = "Yes";
+                        rentData.remove(selectedIndex);
+                    }
+                }
+                try {
+                    new RentalManagement(carData, rentData).setVisible(true);
+                    dispose();
+                } catch (ParseException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        });
 
         cancelButton = new JButton("Cancel");
         infoPanel.add(cancelButton);
@@ -208,8 +239,10 @@ public class RentalManagement extends JFrame{
         cancelButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Main main = new Main();
-                main.setVisible(true);
+                Frame[] frame = Main.getFrames();
+                for (Frame f : frame){
+                    f.setVisible(true);
+                }
                 dispose();
             }
         });
@@ -223,44 +256,6 @@ public class RentalManagement extends JFrame{
         add(new JSeparator(JSeparator.VERTICAL));
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setVisible(true);
         pack();
     }
-
-    public static void main(String[] args) throws ParseException {
-        new RentalManagement(null, null).setVisible(true);
-    }
 }
-
-/*
-        String[] rentalColumns = {"Customer ID", "Car Registration No.", "Rental date", "Due Date", "Return date", "Delay", "Fine"};
-
-        JLabel returnDateLabel = new JLabel("Return Date");
-        infoPanel.add(returnDateLabel);
-
-        MaskFormatter formatter5 = new MaskFormatter("##-##-####");
-        JFormattedTextField returnDateField = new JFormattedTextField(formatter5);
-        infoPanel.add(returnDateField);
-
-        JLabel delayLabel = new JLabel("Delay");
-        infoPanel.add(delayLabel);
-
-        MaskFormatter formatter6 = new MaskFormatter("###");
-        JFormattedTextField delayField = new JFormattedTextField(formatter6);
-        infoPanel.add(delayField);
-
-        JLabel fineLabel = new JLabel("Fine");
-        infoPanel.add(fineLabel);
-
-        MaskFormatter formatter7 = new MaskFormatter("RM ####.##");
-        JFormattedTextField fineField = new JFormattedTextField(formatter7);
-        infoPanel.add(fineField);
-
-        ArrayList<Object[]> rentalData = new ArrayList<>();
-        rentalData.add(new Object[]{"Customer_01", "Car_02", "10-10-2020", "11-11-2020", "12-12-2020", 31, "RM 31.00"});
-        rentalData.add(new Object[]{"Customer_02", "Car_01", "02-02-2020", "04-04-2020", "06-06-2020", 62, "RM 62.00"});
-        rentalTable = createTable(rentalData, rentalColumns);
-        rentalTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-        rentalPane = new JScrollPane();
-        rentalPane.add(rentalTable);
-        * */

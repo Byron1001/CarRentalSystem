@@ -3,6 +3,7 @@ package Admin;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.ParseException;
 
 public class Main extends JFrame {
 
@@ -38,7 +39,12 @@ public class Main extends JFrame {
         rentalButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                CarRegistration reg = new CarRegistration(null);
+                RentalManagement reg = null;
+                try {
+                    reg = new RentalManagement(null, null);
+                } catch (ParseException ex) {
+                    throw new RuntimeException(ex);
+                }
                 hide();
                 reg.setVisible(true);
             }
@@ -60,5 +66,9 @@ public class Main extends JFrame {
                 new_login.setVisible(true);
             }
         });
+    }
+
+    public JFrame getMainFrame(){
+        return this;
     }
 }
