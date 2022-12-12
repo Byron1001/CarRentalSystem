@@ -20,9 +20,8 @@ public class AdminMain extends JFrame {
         carRegistrationButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                CarRegistration reg = new CarRegistration(null);
-                hide();
-                reg.setVisible(true);
+                new CarRegistration().setVisible(true);
+                dispose();
             }
         });
         customerButton.addActionListener(new ActionListener() {
@@ -49,7 +48,7 @@ public class AdminMain extends JFrame {
         returnButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                CarRegistration reg = new CarRegistration(null);
+                CarRegistration reg = new CarRegistration();
                 hide();
                 reg.setVisible(true);
             }
