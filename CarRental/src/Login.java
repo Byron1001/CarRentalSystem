@@ -1,4 +1,4 @@
-package Admin;
+import Admin.Main;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -8,7 +8,7 @@ public class Login extends JFrame{
     private JPanel mainPanel;
     private JTextField UsernameField;
     private JTextField passwordField;
-    private JButton cancelButton;
+    private JButton registerButton;
     private JButton loginButton;
 
     private void createUIComponents() {
@@ -17,7 +17,6 @@ public class Login extends JFrame{
     }
 
     public Login(){
-
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -34,10 +33,10 @@ public class Login extends JFrame{
                 }
             }
         });
-        cancelButton.addActionListener(new ActionListener() {
+        registerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(null, "Hello World");
+                    new Register().setVisible(true);
             }
         });
 

@@ -63,7 +63,6 @@ public class Main extends JFrame {
                 JOptionPane.showMessageDialog(null, "See You Again.");
                 dispose();
                 Login new_login = new Login();
-                new_login.setVisible(true);
             }
         });
     }
