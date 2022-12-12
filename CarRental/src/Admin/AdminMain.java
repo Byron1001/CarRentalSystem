@@ -17,11 +17,6 @@ public class AdminMain extends JFrame {
     private JPanel mainPanel;
 
     public AdminMain(){
-
-        setContentPane(mainPanel);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setResizable(false);
-        pack();
         carRegistrationButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -67,6 +62,11 @@ public class AdminMain extends JFrame {
                 new Login().setVisible(true);
             }
         });
+
+        setContentPane(mainPanel);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
+        pack();
     }
 
     public JFrame getMainFrame(){

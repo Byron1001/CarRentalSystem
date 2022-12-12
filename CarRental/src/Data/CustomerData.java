@@ -7,12 +7,13 @@ import java.util.regex.Pattern;
 
 public class CustomerData {
     File customerDataFile = new File("./CarRental/src/Data/Customer Data.txt");
-    public boolean register(String username, String password)
-    {
+    File adminDataFile = new File("./CarRental/src/Data/Admin Data.txt");
+    public boolean register(String username, String password) {
         init();
         if(!checkUsernameAvail(customerDataFile, username))
             return false;
-
+        if(!checkUsernameAvail(adminDataFile, username))
+            return false;
         Pattern punct = Pattern.compile("\\p{Punct}");
         Matcher m = punct.matcher(username);
         while(m.find()){
