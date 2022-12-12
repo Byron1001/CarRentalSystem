@@ -1,11 +1,13 @@
 package Admin;
 
+import LoginRegister.Login;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.ParseException;
 
-public class Main extends JFrame {
+public class AdminMain extends JFrame {
 
     private JButton carRegistrationButton;
     private JButton customerButton;
@@ -14,7 +16,7 @@ public class Main extends JFrame {
     private JButton logoutButton;
     private JPanel mainPanel;
 
-    public Main(){
+    public AdminMain(){
 
         setContentPane(mainPanel);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -62,7 +64,7 @@ public class Main extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 JOptionPane.showMessageDialog(null, "See You Again.");
                 dispose();
-                Login new_login = new Login();
+                new Login().setVisible(true);
             }
         });
     }

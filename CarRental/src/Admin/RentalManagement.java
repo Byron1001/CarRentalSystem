@@ -239,7 +239,7 @@ public class RentalManagement extends JFrame{
         cancelButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Frame[] frame = Main.getFrames();
+                Frame[] frame = AdminMain.getFrames();
                 for (Frame f : frame){
                     f.setVisible(true);
                 }

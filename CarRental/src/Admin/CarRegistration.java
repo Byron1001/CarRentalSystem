@@ -123,7 +123,7 @@ public class CarRegistration extends JFrame implements MouseListener {
             @Override
             public void actionPerformed(ActionEvent e) {
                 dispose();
-                Main new_main = new Main();
+                AdminMain new_main = new AdminMain();
                 new_main.setVisible(true);
             }
         });

@@ -1,4 +1,6 @@
-import Admin.Main;
+package LoginRegister;
+
+import Admin.AdminMain;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -24,7 +26,7 @@ public class Login extends JFrame{
                 String password = passwordField.getText();
 
                 if (username.equals("john") && password.equals("123")){
-                    Main main = new Main();
+                    AdminMain main = new AdminMain();
                     hide();
                     main.setVisible(true);
                 }
@@ -47,5 +49,10 @@ public class Login extends JFrame{
         setVisible(true);
         pack();
         setResizable(false);
+        setLocationRelativeTo(null);
+    }
+
+    public static void main(String[] args){
+        new Login().setVisible(true);
     }
 }
