@@ -64,7 +64,6 @@ public class CarRegistration extends JFrame implements MouseListener {
             while(scanner.hasNextLine()){
                 String row = scanner.nextLine();
                 Object[] carData = row.split(":", 4);
-                carData[1] = Integer.parseInt(carData[1].toString());
                 finalData.add(carData);
             }
             scanner.close();

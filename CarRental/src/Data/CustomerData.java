@@ -19,6 +19,11 @@ public class CustomerData {
         while(m.find()){
             return false;
         }
+        Matcher m2 = punct.matcher(password);
+        while(m2.find()){
+            return false;
+        }
+
         FileWriter user_input = null;
         BufferedWriter bufferedWriter = null;
         PrintWriter printWriter = null;
@@ -54,9 +59,8 @@ public class CustomerData {
             while(scanner.hasNextLine()){
                 String data = scanner.nextLine();
                 String[] row = data.split(":", 2);
-                if(row[0].equals(username)) {
+                if(row[0].equals(username))
                     return false;
-                }
             }
             scanner.close();
             return true;

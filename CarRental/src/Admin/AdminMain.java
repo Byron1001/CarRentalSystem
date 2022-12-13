@@ -62,10 +62,11 @@ public class AdminMain extends JFrame {
             }
         });
 
-        setContentPane(mainPanel);
+        JScrollPane pane = new JScrollPane(mainPanel);
+        setContentPane(pane);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(900, 500);
         setLocationRelativeTo(null);
-        pack();
     }
 
     public JFrame getMainFrame(){

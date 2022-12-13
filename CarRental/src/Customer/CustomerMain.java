@@ -2,6 +2,8 @@ package Customer;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class CustomerMain extends JFrame{
     private JLabel advertisementLabel;
@@ -20,6 +22,20 @@ public class CustomerMain extends JFrame{
     private JPanel customerMainPanel;
 
     public CustomerMain(){
+        bookYourCarButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new CarBooking().setVisible(true);
+                dispose();
+            }
+        });
+        returnTheCarButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new CarReturn().setVisible(true);
+                dispose();
+            }
+        });
         setVisible(true);
         setSize(new Dimension(900, 500));
         setContentPane(customerMainPanel);

@@ -55,17 +55,21 @@ public class CustomerRegistration extends JFrame implements MouseListener {
     }
 
     public CustomerRegistration(ArrayList<Object[]> data){
+        customerGenderBox = new JComboBox();
         customerGenderBox.addItem("Male");
         customerGenderBox.addItem("Female");
         customerGenderBox.addItem("Prefer not to say");
 
+        customerPaymentMethodBox = new JComboBox();
         customerPaymentMethodBox.addItem("TNG ewallet");
         customerPaymentMethodBox.addItem("Online banking");
         customerPaymentMethodBox.addItem("Debit card/Bank card");
 
 
-        this.setLayout(new GridLayout(2, 1));
-        this.setSize(900, 500);
+        setLayout(new GridLayout(2, 1));
+        setSize(900, 500);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         if(data == null){
             data = new ArrayList<Object[]>();
@@ -82,8 +86,9 @@ public class CustomerRegistration extends JFrame implements MouseListener {
             scrollPane = new JScrollPane(overload_table);
         }
 
-        this.add(scrollPane);
-        this.add(customerRegPanel);
+        add(scrollPane);
+        add(customerRegPanel);
+
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
         finalData = data;
@@ -102,7 +107,6 @@ public class CustomerRegistration extends JFrame implements MouseListener {
                 CustomerRegistration new_reg = new CustomerRegistration(finalData);
             }
         });
-
         modifyButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -147,6 +151,8 @@ public class CustomerRegistration extends JFrame implements MouseListener {
             }
         });
     }
+
+    public static void main(String[] args){new CustomerRegistration(null).setVisible(true);}
 
     private void createUIComponents() {
     }

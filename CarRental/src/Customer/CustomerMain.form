@@ -1,56 +1,61 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="Customer.CustomerMain">
-  <grid id="27dc6" binding="customerMainPanel" layout-manager="GridLayoutManager" row-count="5" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+  <grid id="27dc6" binding="customerMainPanel" layout-manager="GridLayoutManager" row-count="2" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="0" left="0" bottom="0" right="0"/>
     <constraints>
-      <xy x="20" y="20" width="500" height="400"/>
+      <xy x="20" y="20" width="764" height="415"/>
     </constraints>
     <properties/>
     <border type="none"/>
     <children>
-      <grid id="a8d1d" binding="notificationPanel" layout-manager="GridLayoutManager" row-count="1" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-        <margin top="10" left="20" bottom="0" right="20"/>
+      <grid id="24e47" binding="advertisementPanel" layout-manager="GridLayoutManager" row-count="5" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+        <margin top="30" left="0" bottom="0" right="0"/>
         <constraints>
           <grid row="0" column="0" row-span="1" col-span="2" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
         </constraints>
-        <properties/>
+        <properties>
+          <background color="-13618379"/>
+        </properties>
         <border type="none"/>
         <children>
-          <component id="5b079" class="javax.swing.JLabel" binding="welcomeBackLabel">
+          <grid id="a8d1d" binding="notificationPanel" layout-manager="GridLayoutManager" row-count="1" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+            <margin top="10" left="20" bottom="0" right="20"/>
             <constraints>
-              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+              <grid row="0" column="0" row-span="1" col-span="2" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <font size="16"/>
-              <text value="Welcome Back to Car Rental System"/>
+              <background color="-13618379"/>
             </properties>
-          </component>
-          <component id="dadee" class="javax.swing.JButton" binding="latestNotificationButton" default-binding="true">
-            <constraints>
-              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
-            </constraints>
-            <properties>
-              <text value="Latest notification"/>
-            </properties>
-          </component>
-        </children>
-      </grid>
-      <grid id="24e47" binding="advertisementPanel" layout-manager="GridLayoutManager" row-count="3" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-        <margin top="30" left="0" bottom="0" right="0"/>
-        <constraints>
-          <grid row="1" column="0" row-span="1" col-span="2" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
-        </constraints>
-        <properties/>
-        <border type="none"/>
-        <children>
+            <border type="none"/>
+            <children>
+              <component id="5b079" class="javax.swing.JLabel" binding="welcomeBackLabel">
+                <constraints>
+                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <font size="16" style="1"/>
+                  <foreground color="-986896"/>
+                  <text value="Welcome Back to Car Rental System"/>
+                </properties>
+              </component>
+              <component id="dadee" class="javax.swing.JButton" binding="latestNotificationButton" default-binding="true">
+                <constraints>
+                  <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="Latest notification"/>
+                </properties>
+              </component>
+            </children>
+          </grid>
           <component id="9aa48" class="javax.swing.JLabel" binding="advertisementLabel">
             <constraints>
-              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="2" fill="0" indent="0" use-parent-layout="false"/>
+              <grid row="1" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="2" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
               <background color="-986896"/>
-              <font size="16" style="1"/>
-              <foreground color="-4510157"/>
+              <font size="28" style="1"/>
+              <foreground color="-3132615"/>
               <text value="12.12"/>
               <verticalAlignment value="0"/>
               <verticalTextPosition value="3"/>
@@ -58,30 +63,36 @@
           </component>
           <component id="517a9" class="javax.swing.JLabel" binding="advertisementLabel2">
             <constraints>
-              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="1" fill="0" indent="0" use-parent-layout="false"/>
+              <grid row="2" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="1" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
               <background color="-16375440"/>
-              <font name="Arial Black" size="26" style="1"/>
+              <font name="Arial Black" size="48" style="1"/>
               <foreground color="-684438"/>
               <text value="Awesome Discount"/>
             </properties>
           </component>
           <component id="60cc6" class="javax.swing.JLabel" binding="advertisementLabel3">
             <constraints>
-              <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="1" fill="0" indent="0" use-parent-layout="false"/>
+              <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="1" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <foreground color="-16777216"/>
+              <font name="Arial" size="22"/>
+              <foreground color="-986896"/>
               <text value="You shouldn't miss this!"/>
             </properties>
           </component>
+          <vspacer id="475f6">
+            <constraints>
+              <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+            </constraints>
+          </vspacer>
         </children>
       </grid>
       <grid id="31713" binding="buttonPanel" layout-manager="GridLayoutManager" row-count="4" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
         <margin top="0" left="20" bottom="20" right="20"/>
         <constraints>
-          <grid row="4" column="0" row-span="1" col-span="2" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+          <grid row="1" column="0" row-span="1" col-span="2" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties/>
         <border type="none"/>
@@ -128,17 +139,6 @@
           </component>
         </children>
       </grid>
-      <component id="b6943" class="javax.swing.JSeparator">
-        <constraints>
-          <grid row="3" column="0" row-span="1" col-span="2" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
-        </constraints>
-        <properties/>
-      </component>
-      <vspacer id="eba96">
-        <constraints>
-          <grid row="2" column="0" row-span="1" col-span="2" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
-        </constraints>
-      </vspacer>
     </children>
   </grid>
 </form>

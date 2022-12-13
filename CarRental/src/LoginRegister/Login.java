@@ -79,6 +79,7 @@ public class Login extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                     new Register().setVisible(true);
+                    dispose();
             }
         });
 

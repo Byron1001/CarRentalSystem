@@ -22,6 +22,7 @@ public class Register extends JFrame{
     private JLabel passwordLabel;
     private JButton registerButton;
     private JButton adminRegistrationButton;
+    private JButton cancelButton;
     String username, password;
 
     public Register(){
@@ -105,6 +106,13 @@ public class Register extends JFrame{
                 else {
                     JOptionPane.showMessageDialog(null, "Error secret code.\n Please get it from authorities!", "Secret code error", JOptionPane.ERROR_MESSAGE);
                 }
+            }
+        });
+        cancelButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new Login().setVisible(true);
+                dispose();
             }
         });
     }
