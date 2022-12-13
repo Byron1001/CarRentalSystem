@@ -111,6 +111,7 @@ public class CarBooking extends JFrame{
     private void init(){
         try {
             carDataFile.createNewFile();
+            bookingHistoryFile.createNewFile();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

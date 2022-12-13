@@ -5,13 +5,19 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.text.MaskFormatter;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Scanner;
 
 public class RentalManagement extends JFrame{
-    private JFormattedTextField customerIDField;
+    private JTextField customerIDField;
     private JFormattedTextField carIDField;
     private JButton modifyButton;
     private JButton rentButton;
@@ -23,8 +29,11 @@ public class RentalManagement extends JFrame{
     private JLabel carIDLabel;
     private JTable availableTable, rentTable;
     private JScrollPane availablePane, rentPane;
+    private Scanner scanner;
+    File carDataFile = new File("./CarRental/src/Data/Car Data.txt");
+    File bookingHistoryFile = new File("./CarRental/src/Data/Booking History.txt");
     String[] carColumns = {"Car Registration No", "Make", "Model", "Available"};
-    String[] rentalColumns = {"Customer ID", "Car Registration No.", "Rental date", "Due Date"};
+    String[] rentalColumns = {"Customer ID", "Car Registration No.", "Rental date", "Due Date", "Return Date" + "Return" + "Payment"};
 
     private static JTable createTable(ArrayList<Object[]> data, String[] columns){
         DefaultTableModel model = new DefaultTableModel(){
@@ -41,20 +50,21 @@ public class RentalManagement extends JFrame{
         for (Object[] i : data) {
             model.addRow(i);
         }
-
+        tempTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         tempTable.getTableHeader().setFont(new Font("Times New Roman", Font.BOLD, 14));
         return tempTable;
     }
-    public RentalManagement(ArrayList<Object[]> overloadCarData,ArrayList<Object[]> overloadRentData) throws ParseException {
-        infoPanel.setLayout(new GridLayout(8, 2));
+    public RentalManagement() throws ParseException {
+
+        init();
+        infoPanel.setLayout(new GridLayout(9, 2));
         infoPanel.add(new JSeparator(SwingConstants.HORIZONTAL));
         infoPanel.add(new JSeparator(SwingConstants.HORIZONTAL));
 
         customerIDLabel = new JLabel("Customer ID");
         infoPanel.add(customerIDLabel);
 
-        MaskFormatter formatter = new MaskFormatter("Customer_##");
-        customerIDField = new JFormattedTextField(formatter);
+        customerIDField = new JTextField();
         infoPanel.add(customerIDField);
 
         carIDLabel = new JLabel("Car Registration No.");
@@ -78,30 +88,16 @@ public class RentalManagement extends JFrame{
         JFormattedTextField dueDateField = new JFormattedTextField(formatter4);
         infoPanel.add(dueDateField);
 
-        this.setLayout(new GridBagLayout());
+        setLayout(new GridLayout(1, 3, 10, 0));
 
-        ArrayList<Object[]> carData = new ArrayList<>();
-        carData.add(new Object[]{"Car_01", 2002, "AMG", "Yes"});
-        carData.add(new Object[]{"Car_02", 2012, "AMG", "Yes"});
-        carData.add(new Object[]{"Car_03", 2018, "Coupe", "Yes"});
+        ArrayList<Object[]> carData = getData(carDataFile);
 
-        ArrayList<Object[]> rentData = new ArrayList<>();
-        rentData.add(new Object[] {"Customer_01", "Car_02", "01-01-2022", "10-10-2022"});
-        rentData.add(new Object[] {"Customer_02", "Car_01", "09-09-2022", "12-12-2022"});
+        ArrayList<Object[]> rentData = getData(bookingHistoryFile);
 
-        if(overloadCarData == null && overloadRentData == null){
-            availableTable = createTable(carData, carColumns);
-            rentTable = createTable(rentData, rentalColumns);
-        }
-        else {
-            availableTable = createTable(overloadCarData, carColumns);
-            rentTable = createTable(overloadRentData, rentalColumns);
-        }
+        availableTable = createTable(carData, carColumns);
+        rentTable = createTable(rentData, rentalColumns);
 
-        availableTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
         availablePane = new JScrollPane(availableTable);
-
-        rentTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
         rentPane = new JScrollPane(rentTable);
 
         availableTable.addMouseListener(new MouseListener() {
@@ -178,16 +174,24 @@ public class RentalManagement extends JFrame{
                 data[1] = carIDField.getText();
                 data[2] = rentalDateField.getText();
                 data[3] = dueDateField.getText();
-                rentData.remove(selectedIndex);
-                rentData.add(data);
-                RentalManagement reg = null;
-                try {
-                    reg = new RentalManagement(carData, rentData);
-                } catch (ParseException ex) {
-                    throw new RuntimeException(ex);
+
+                boolean check = checkUserAvail(data[0].toString());
+                boolean check2 = checkCarAvail(data[1].toString());
+                if (check && check2){
+                    rentData.remove(selectedIndex);
+                    rentData.add(data);
+                    saveData(rentData, bookingHistoryFile);
+                    RentalManagement reg = null;
+                    try {
+                        new RentalManagement().setVisible(true);
+                    } catch (ParseException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                    dispose();
                 }
-                dispose();
-                reg.setVisible(true);
+                else {
+                    JOptionPane.showMessageDialog(null, "Car ID or Customer ID not existed", "Input error", JOptionPane.ERROR_MESSAGE);
+                }
             }
         });
 
@@ -196,18 +200,29 @@ public class RentalManagement extends JFrame{
         rentButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Object[] data = {customerIDField.getText(), carIDField.getText(), rentalDateField.getText(), dueDateField.getText()};
                 int selectedIndex = availableTable.getSelectedRow();
-                rentData.add(data);
-                carData.remove(selectedIndex);
-                RentalManagement rental = null;
-                try {
-                    rental = new RentalManagement(carData, rentData);
-                } catch (ParseException ex) {
-                    throw new RuntimeException(ex);
+                Object[] rent = {customerIDField.getText(), carIDField.getText(), rentalDateField.getText(), dueDateField.getText(), "00-00-0000", "No", "No"};
+                boolean check = checkUserAvail(rent[0].toString());
+                if (check){
+                    Object[] car = carData.get(selectedIndex);
+                    rentData.add(rent);
+                    car[3] = "No";
+                    carData.remove(selectedIndex);
+                    carData.add(car);
+                    saveData(rentData, bookingHistoryFile);
+                    saveData(carData, carDataFile);
+                    RentalManagement rental = null;
+                    try {
+                        rental = new RentalManagement();
+                    } catch (ParseException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                    rental.setVisible(true);
+                    dispose();
                 }
-                dispose();
-                rental.setVisible(true);
+                else {
+                    JOptionPane.showMessageDialog(null, "Username error", "Username error", JOptionPane.ERROR_MESSAGE);
+                }
             }
         });
 
@@ -217,15 +232,17 @@ public class RentalManagement extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 int selectedIndex = rentTable.getSelectedRow();
-                Object carID = rentData.get(selectedIndex)[1];
+                String carID = rentData.get(selectedIndex)[1].toString();
                 for (Object[] car : carData) {
                     if (car[0].equals(carID)) {
                         car[3] = "Yes";
                         rentData.remove(selectedIndex);
                     }
                 }
+                saveData(rentData, bookingHistoryFile);
+                saveData(carData, carDataFile);
                 try {
-                    new RentalManagement(carData, rentData).setVisible(true);
+                    new RentalManagement().setVisible(true);
                     dispose();
                 } catch (ParseException ex) {
                     throw new RuntimeException(ex);
@@ -235,27 +252,122 @@ public class RentalManagement extends JFrame{
 
         cancelButton = new JButton("Cancel");
         infoPanel.add(cancelButton);
+        infoPanel.add(new JSeparator());
+        infoPanel.add(new JSeparator());
 
         cancelButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Frame[] frame = AdminMain.getFrames();
-                for (Frame f : frame){
-                    f.setVisible(true);
-                }
+                new AdminMain().setVisible(true);
+                saveData(rentData, bookingHistoryFile);
+                saveData(carData, carDataFile);
                 dispose();
             }
         });
 
-        add(new JSeparator(JSeparator.VERTICAL));
         add(availablePane);
-        add(new JSeparator(JSeparator.VERTICAL));
         add(rentPane);
-        add(new JSeparator(JSeparator.VERTICAL));
         add(infoPanel);
-        add(new JSeparator(JSeparator.VERTICAL));
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        pack();
+        setSize(new Dimension(900, 500));
+        setLocationRelativeTo(null);
     }
+
+    private void init(){
+        try {
+            carDataFile.createNewFile();
+            bookingHistoryFile.createNewFile();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private ArrayList<Object[]> getData(File file){
+        ArrayList<Object[]> tempData = new ArrayList<>();
+        try {
+            scanner = new Scanner(file);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        while(scanner.hasNextLine()){
+            String row = scanner.nextLine();
+            if (file == bookingHistoryFile){
+                String[] data = row.split(":", 7);
+                if (data.length > 1){
+                    Object[] da = {data[0], data[1], data[2], data[3], data[4], data[5], data[6]};
+                    tempData.add(da);
+                }
+            }
+            else {
+                String[] data = row.split(":", 4);
+                if (data.length > 1){
+                    Object[] da = {data[0], data[1], data[2], data[3]};
+                    tempData.add(da);
+                }
+            }
+        }
+        scanner.close();
+        return tempData;
+    }
+
+    private void saveData(ArrayList<Object[]> data, File file){
+        try {
+            FileWriter writer = new FileWriter(file, false);
+            for(Object[] ob:data){
+//                System.out.println(Arrays.toString(ob));
+                String whole = ob[0] + ":" + ob[1] + ":" + ob[2] + ":" + ob[3];
+                if (file == bookingHistoryFile){
+                    whole += ":" + ob[4] + ":" + ob[5] + ":" + ob[6];
+                }
+                whole += "\n";
+                if(ob.length == data.indexOf(ob) + 1){
+                    whole += "\n";
+                }
+                writer.write(whole);
+            }
+            writer.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private boolean checkUserAvail(String username){
+        File customerDataFile = new File("./CarRental/src/Data/Customer Data.txt");
+        try {
+            scanner = new Scanner(customerDataFile);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        while(scanner.hasNextLine()){
+            String row = scanner.nextLine();
+            String[] data = row.split(":", 2);
+            if (data[0].equals(username))
+                return true;
+        }
+        scanner.close();
+        return false;
+    }
+
+    private boolean checkCarAvail(String carID){
+        File customerDataFile = new File("./CarRental/src/Data/Car Data.txt");
+        try {
+            scanner = new Scanner(customerDataFile);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        while(scanner.hasNextLine()){
+            String row = scanner.nextLine();
+            String[] data = row.split(":", 4);
+            if (data[0].equals(carID))
+                return true;
+        }
+        scanner.close();
+        return false;
+    }
+
+    public static void main(String[] args) throws ParseException {
+        new RentalManagement().setVisible(true);
+    }
+
 }

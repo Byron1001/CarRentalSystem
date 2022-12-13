@@ -1,163 +1,124 @@
 package Admin;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumn;
 import javax.swing.text.MaskFormatter;
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.security.Key;
+import java.awt.event.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Locale;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 public class ReturnManagement extends JFrame{
-    private JTable returnTable;
-    private JLabel customerIDLabel, carRegLabel, rentalDateLabel, dueDateLabel, returnDateLabel, delayLabel, fineLabel;
-    private JTextField fineField;
-    private JFormattedTextField customerIDField, carRegField, rentalDateField, returnDateField, dueDateField, delayField;
-    private JPanel infoPanel;
-    private ArrayList<Object[]> returnData;
-    private JScrollPane returnPane;
-    private JButton returnButton, modifyButton, cancelButton, deleteButton;
+    private JTextField customerIDField;
+    private JFormattedTextField carIDField;
+    private JButton returnButton;
+    private JButton cancelButton;
+    private JPanel buttonPanel = new JPanel();
+    private JPanel infoPanel = new JPanel();
+    private JLabel customerIDLabel;
+    private JLabel carIDLabel;
+    private JTable availableTable, rentTable;
+    private JScrollPane availablePane, rentPane;
+    private Scanner scanner;
+    File carDataFile = new File("./CarRental/src/Data/Car Data.txt");
+    File bookingHistoryFile = new File("./CarRental/src/Data/Booking History.txt");
+    File returnHistoryFile = new File("./CarRental/src/Data/Return History.txt");
+    File paymentFile = new File("./CarRental/src/Data/Payment.txt");
+    String[] carColumns = {"Car Registration No", "Make", "Model", "Available"};
+    String[] rentalColumns = {"Customer ID", "Car Registration No.", "Rental date", "Due Date", "Return Date" + "Return" + "Payment"};
 
-    String[] rentalColumns = {"Customer ID", "Car Registration No.", "Rental date", "Due Date", "Return date", "Delay", "Fine (RM)"};
-
-    private JTable createTable(ArrayList<Object[]>data, String[] columns){
-        DefaultTableModel model = new DefaultTableModel();
+    private static JTable createTable(ArrayList<Object[]> data, String[] columns){
+        DefaultTableModel model = new DefaultTableModel(){
+            @Override
+            public boolean isCellEditable(int row, int columns){
+                return false;
+            }
+        };
         JTable tempTable = new JTable(model);
-        for (String col : columns){
-            model.addColumn(col);
-        }
-        for (Object[] dt : data){
-            model.addRow(dt);
-        }
-        tempTable.getTableHeader().setFont(new Font("Times New Roman", Font.BOLD, 14));
 
-        for(int i = 0; i < 7;i++){
-            TableColumn column = tempTable.getColumnModel().getColumn(i);
-            column.setMinWidth(100);
+        for (int i = 0; i < columns.length;i++){
+            model.addColumn(columns[i]);
         }
+        for (Object[] i : data) {
+            model.addRow(i);
+        }
+        tempTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        tempTable.getTableHeader().setFont(new Font("Times New Roman", Font.BOLD, 14));
         return tempTable;
     }
     public ReturnManagement() throws ParseException {
-        infoPanel = new JPanel();
-        infoPanel.setLayout(new GridLayout(10, 2));
-        Border gap = BorderFactory.createEmptyBorder(10, 10, 10, 10);
-        infoPanel.setBorder(gap);
 
-        customerIDLabel = new JLabel(rentalColumns[0]);
+        init();
+        infoPanel.setLayout(new GridLayout(10, 2));
+        infoPanel.add(new JSeparator(SwingConstants.HORIZONTAL));
+        infoPanel.add(new JSeparator(SwingConstants.HORIZONTAL));
+
+        customerIDLabel = new JLabel("Customer ID");
         infoPanel.add(customerIDLabel);
 
-        MaskFormatter formatter = new MaskFormatter("Customer_##");
-        customerIDField = new JFormattedTextField(formatter);
+        customerIDField = new JTextField();
         infoPanel.add(customerIDField);
 
-        carRegLabel = new JLabel(rentalColumns[1]);
-        infoPanel.add(carRegLabel);
+        carIDLabel = new JLabel("Car Registration No.");
+        infoPanel.add(carIDLabel);
 
-        MaskFormatter formatter1 = new MaskFormatter("Car_##");
-        carRegField = new JFormattedTextField(formatter1);
-        infoPanel.add(carRegField);
+        MaskFormatter formatter2 = new MaskFormatter("Car_##");
+        carIDField = new JFormattedTextField(formatter2);
+        infoPanel.add(carIDField);
 
-        rentalDateLabel = new JLabel(rentalColumns[2]);
+        JLabel rentalDateLabel = new JLabel("Rental date");
         infoPanel.add(rentalDateLabel);
 
-        MaskFormatter formatter2 = new MaskFormatter("##-##-####");
-        rentalDateField = new JFormattedTextField(formatter2);
+        MaskFormatter formatter3 = new MaskFormatter("##-##-####");
+        JFormattedTextField rentalDateField = new JFormattedTextField(formatter3);
         infoPanel.add(rentalDateField);
 
-        returnDateLabel = new JLabel(rentalColumns[3]);
-        infoPanel.add(returnDateLabel);
-
-        MaskFormatter formatter3 = new MaskFormatter("##-##-####");
-        returnDateField = new JFormattedTextField(formatter3);
-        infoPanel.add(returnDateField);
-
-        dueDateLabel = new JLabel(rentalColumns[4]);
+        JLabel dueDateLabel = new JLabel("Due date");
         infoPanel.add(dueDateLabel);
 
         MaskFormatter formatter4 = new MaskFormatter("##-##-####");
-        dueDateField = new JFormattedTextField(formatter4);
+        JFormattedTextField dueDateField = new JFormattedTextField(formatter4);
         infoPanel.add(dueDateField);
 
-        delayLabel = new JLabel(rentalColumns[5]);
-        infoPanel.add(delayLabel);
+        JLabel returnDateLabel = new JLabel("Return date");
+        infoPanel.add(returnDateLabel);
 
-        delayField = new JFormattedTextField();
-        delayField.setEditable(false);
-        infoPanel.add(delayField);
+        MaskFormatter formatter5 = new MaskFormatter("##-##-####");
+        JFormattedTextField returnDateField = new JFormattedTextField(formatter5);
+        infoPanel.add(returnDateField);
 
-        fineLabel = new JLabel(rentalColumns[6]);
-        infoPanel.add(fineLabel);
+        setLayout(new GridLayout(1, 3, 10, 0));
 
-        fineField = new JTextField();
-        infoPanel.add(fineField);
-        fineField.addKeyListener(new KeyListener() {
-            @Override
-            public void keyTyped(KeyEvent e) {
-                char c = e.getKeyChar();
-                if((c < '0' || c > '9') && c != '.'){
-                    e.consume();
-                }
-            }
+        ArrayList<Object[]> carData = getData(carDataFile);
+        ArrayList<Object[]> rentData = getData(bookingHistoryFile);
+        ArrayList<Object[]> returnData = getData(returnHistoryFile);
 
-            @Override
-            public void keyPressed(KeyEvent e) {
+        availableTable = createTable(carData, carColumns);
+        rentTable = createTable(rentData, rentalColumns);
 
-            }
+        availablePane = new JScrollPane(availableTable);
+        rentPane = new JScrollPane(rentTable);
 
-            @Override
-            public void keyReleased(KeyEvent e) {
-
-            }
-        });
-
-        infoPanel.add(new JSeparator());
-        infoPanel.add(new JSeparator());
-        returnButton = new JButton("Return");
-        infoPanel.add(returnButton);
-        modifyButton = new JButton("Modify");
-        infoPanel.add(modifyButton);
-        deleteButton = new JButton("Delete");
-        infoPanel.add(deleteButton);
-        cancelButton = new JButton("Cancel");
-        infoPanel.add(cancelButton);
-
-        returnData = new ArrayList<>();
-        returnData.add(new Object[]{"Customer_01", "Car_02", "10-10-2020", "11-11-2020", "12-12-2020", 31, 31.00});
-        returnData.add(new Object[]{"Customer_02", "Car_01", "02-02-2020", "04-04-2020", "06-06-2020", 62, 62.00});
-        returnData.add(new Object[]{"Customer_03", "Car_03", "02-02-2020", "04-04-2020", "01-03-2020", 62, 0.00});
-        returnTable = createTable(returnData, rentalColumns);
-        returnTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-        returnTable.addMouseListener(new MouseListener() {
+        availableTable.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                int selectedIndex = returnTable.getSelectedRow();
-                Object[] row = returnData.get(selectedIndex);
+                int selectedIndex = availableTable.getSelectedRow();
+                carIDField.setValue(availableTable.getValueAt(selectedIndex, 0));
 
-                customerIDField.setText(row[0].toString());
-                carRegField.setText(row[1].toString());
-                rentalDateField.setText(row[2].toString());
-                returnDateField.setText(row[3].toString());
-                dueDateField.setText(row[4].toString());
+                SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+                Calendar calendar = Calendar.getInstance();
+                rentalDateField.setText(format.format(calendar.getTime()));
 
-                Integer days = 0;
-                try {
-                    days = dateCount(row[3].toString(), row[4].toString());
-                } catch (ParseException ex) {
-                    throw new RuntimeException(ex);
-                }
-                delayField.setText(days.toString() + " days");
-                Double fine = days * 50.00;
-                fineField.setText(fine.toString());
+                calendar.add(Calendar.DATE, 1);
+                dueDateField.setText(format.format(calendar.getTime()));
+
+                customerIDField.setText(null);
             }
             @Override
             public void mousePressed(MouseEvent e) {
@@ -176,14 +137,201 @@ public class ReturnManagement extends JFrame{
 
             }
         });
-        returnPane = new JScrollPane(returnTable);
+        rentTable.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int selectedIndex = rentTable.getSelectedRow();
+                customerIDField.setText(rentTable.getValueAt(selectedIndex, 0).toString());
+                carIDField.setText(rentTable.getValueAt(selectedIndex, 1).toString());
+                rentalDateField.setText(rentTable.getValueAt(selectedIndex, 2).toString());
+                dueDateField.setText(rentTable.getValueAt(selectedIndex, 3).toString());
 
-        setLayout(new FlowLayout());
-        add(returnPane);
+                SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+                Calendar calendar = Calendar.getInstance();
+                returnDateField.setText(format.format(calendar.getTime()));
+            }
+            @Override
+            public void mousePressed(MouseEvent e) {
+
+            }
+            @Override
+            public void mouseReleased(MouseEvent e) {
+
+            }
+            @Override
+            public void mouseEntered(MouseEvent e) {
+
+            }
+            @Override
+            public void mouseExited(MouseEvent e) {
+
+            }
+        });
+
+        infoPanel.add(new JSeparator(SwingConstants.HORIZONTAL));
+        infoPanel.add(new JSeparator(SwingConstants.HORIZONTAL));
+
+        returnButton = new JButton("Return");
+        infoPanel.add(returnButton);
+        returnButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int selectedIndex = rentTable.getSelectedRow();
+                Object[] rent = {customerIDField.getText(), carIDField.getText(), rentalDateField.getText(), dueDateField.getText(), returnDateField.getText(), "Yes", "No"};
+                boolean check = checkUserAvail(rent[0].toString());
+                if (check){
+                    Object[] car = carData.get(selectedIndex);
+                    rentData.remove(rent);
+                    car[3] = "Yes";
+                    carData.remove(selectedIndex);
+                    carData.add(car);
+                    returnData.add(rent);
+                    saveData(rentData, bookingHistoryFile);
+                    saveData(carData, carDataFile);
+                    saveData(returnData, returnHistoryFile);
+                    try {
+                        int delay = dateCount(returnDateField.getText(), dueDateField.getText());
+                        int rentDay = dateCount(rentalDateField.getText(), returnDateField.getText());
+                        Object[] payment = {customerIDField.getText(), carIDField.getText(), rentDay, delay, rentDay*20, delay*50};
+                        String message = "Customer ID: " + customerIDField.getText() + "\n" +
+                                "Car ID: " + carIDField.getText() + "\n" +
+                                "Rental date: " + rentalDateField.getText() + "\n" +
+                                "Return date: " + returnDateField.getText() + "\n" +
+                                "Due date: " + dueDateField.getText() + "\n" +
+                                "Your rental payment:" + payment[3] + "\n" +
+                                "Your fine payment:" + payment[4] + "\n";
+                        JOptionPane.showMessageDialog(null, message, "Rental summary", JOptionPane.INFORMATION_MESSAGE);
+                        addPayment(payment);
+                    } catch (ParseException ex) {
+                        throw new RuntimeException(ex);
+                    }
+
+                    ReturnManagement rental = null;
+                    try {
+                        rental = new ReturnManagement();
+                    } catch (ParseException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                    rental.setVisible(true);
+                    dispose();
+                }
+                else {
+                    JOptionPane.showMessageDialog(null, "Username error", "Username error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+
+        cancelButton = new JButton("Cancel");
+        infoPanel.add(cancelButton);
+        infoPanel.add(new JSeparator());
+        infoPanel.add(new JSeparator());
+
+        cancelButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new AdminMain().setVisible(true);
+                saveData(rentData, bookingHistoryFile);
+                saveData(carData, carDataFile);
+                dispose();
+            }
+        });
+
+        add(availablePane);
+        add(rentPane);
         add(infoPanel);
-        pack();
+
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(new Dimension(900, 500));
         setLocationRelativeTo(null);
+    }
+
+    private void init(){
+        try {
+            carDataFile.createNewFile();
+            bookingHistoryFile.createNewFile();
+            returnHistoryFile.createNewFile();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private ArrayList<Object[]> getData(File file){
+        ArrayList<Object[]> tempData = new ArrayList<>();
+        try {
+            scanner = new Scanner(file);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        while(scanner.hasNextLine()){
+            String row = scanner.nextLine();
+            if (file == bookingHistoryFile || file == returnHistoryFile){
+                String[] data = row.split(":", 7);
+                if (data.length > 1){
+                    Object[] da = {data[0], data[1], data[2], data[3], data[4], data[5], data[6]};
+                    tempData.add(da);
+                }
+            }
+            else {
+                String[] data = row.split(":", 4);
+                if (data.length > 1){
+                    Object[] da = {data[0], data[1], data[2], data[3]};
+                    tempData.add(da);
+                }
+            }
+        }
+        scanner.close();
+        return tempData;
+    }
+
+    private void saveData(ArrayList<Object[]> data, File file){
+        try {
+            FileWriter writer = new FileWriter(file, false);
+            for(Object[] ob:data){
+//                System.out.println(Arrays.toString(ob));
+                String whole = ob[0] + ":" + ob[1] + ":" + ob[2] + ":" + ob[3];
+                if (file == bookingHistoryFile || file == returnHistoryFile){
+                    whole += ":" + ob[4] + ":" + ob[5] + ":" + ob[6];
+                }
+                whole += "\n";
+                if(ob.length == data.indexOf(ob) + 1){
+                    whole += "\n";
+                }
+                writer.write(whole);
+            }
+            writer.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private boolean checkUserAvail(String username){
+        File customerDataFile = new File("./CarRental/src/Data/Customer Data.txt");
+        try {
+            scanner = new Scanner(customerDataFile);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        while(scanner.hasNextLine()){
+            String row = scanner.nextLine();
+            String[] data = row.split(":", 2);
+            if (data[0].equals(username))
+                return true;
+        }
+        scanner.close();
+        return false;
+    }
+
+    private void addPayment(Object[] payment){
+        try {
+            FileWriter writer = new FileWriter(paymentFile, true);
+            String whole = payment[0].toString();
+            for(int i = 1;i < payment.length;i++){
+                whole = whole + ":" + payment[i].toString();
+            }
+            writer.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     protected static int dateCount(String returnDate, String dueDate) throws ParseException {
@@ -201,6 +349,6 @@ public class ReturnManagement extends JFrame{
 
     public static void main(String[] args) throws ParseException {
         new ReturnManagement().setVisible(true);
-//        new RentalManagement(null, null).setVisible(true);
     }
+
 }

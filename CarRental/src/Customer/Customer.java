@@ -13,7 +13,7 @@ import java.util.LinkedList;
 import javax.swing.JOptionPane;
 
 public class Customer {
-    protected String username, password;
+    public String username, password;
 
     public Customer(String username, String password)
     {
@@ -21,8 +21,7 @@ public class Customer {
         this.password = password;
     }
 
-    public int data_validity(Customer customer)
-    {
+    public int data_validity(Customer customer) {
         for(char a : customer.username.toCharArray()){
             if(a == ':')
                 return 2;
@@ -42,8 +41,7 @@ public class Customer {
         return 1;
     }
 
-    public int user_login(Customer customer)
-    {
+    public int user_login(Customer customer) {
         if(customer.user_exist(customer.username)){
             if(customer.password_check(customer)){
                 customer.record_login_time(customer.username);

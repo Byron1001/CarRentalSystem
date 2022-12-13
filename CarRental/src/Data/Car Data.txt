@@ -1,2 +1,3 @@
-car1:2022:AMG:Yes
-car2:2022:AGP:No
+Car_01:2002:AMG:Yes
+Car_02:2012:AMG:Yes
+Car_03:2018:Coupe:Yes

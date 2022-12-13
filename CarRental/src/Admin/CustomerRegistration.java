@@ -1,38 +1,39 @@
 package Admin;
 
+import Customer.Customer;
+import Data.CustomerData;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class CustomerRegistration extends JFrame implements MouseListener {
-    private JTextField customerIDField;
-    private JTextField customerNameField;
-    private JComboBox customerPaymentMethodBox;
-    private JComboBox customerGenderBox;
+    private JLabel usernameLabel, passwordLabel;
+    private JTextField usernameField, passwordField;
     private JButton addButton;
     private JButton deleteButton;
     private JButton modifyButton;
     private JButton cancelButton;
-    private JPanel customerRegPanel;
-    private JLabel customerIDLabel;
-    private JLabel customerNameLabel;
-    private JLabel customerPaymentMethodLabel;
-    private JLabel customerGenderLabel;
-    private JFormattedTextField customerMobileNumberField;
-    private JLabel customerMobileNumberLabel;
-
+    private JPanel buttonPanel;
     private JScrollPane scrollPane;
-    private String customerIDString, customerPaymentMethodString, customerNameString, customerGenderString;
+    private String usernameString, passwordString;
+    private JTable table1;
+    private Scanner scanner;
+    ArrayList<Customer> data;
+    private String[] columns = {"Username", "Password"};
+    File customerDataFile = new File("./CarRental/src/Data/Customer Data.txt");
 
-    private JTable table1, overload_table;
-    private String customerMobileNumberString;
-    ArrayList<Object[]> finalData;
-
-    private Object[] columns = {"Customer ID", "Name", "Mobile number", "Payment Method", "Gender"};
-
-    private JTable createTable(ArrayList<Object[]> data){
+    private JTable createTable(ArrayList<Customer> data){
         DefaultTableModel model = new DefaultTableModel(){
             @Override
             public boolean isCellEditable(int row, int columns){
@@ -41,70 +42,75 @@ public class CustomerRegistration extends JFrame implements MouseListener {
         };
         JTable temp_table = new JTable(model);
 
-        for(int i = 0;i < columns.length;i++){
-            model.addColumn(columns[i]);
+        for (String col : columns){
+            model.addColumn(col);
         }
 
         for(int i = 0; i < data.size();i++){
-            model.addRow(data.get(i));
+            model.addRow(new String[] {data.get(i).username, data.get(i).password});
         }
-
         temp_table.getTableHeader().setFont(new Font("Times New Roman", Font.BOLD, 14));
-
         return temp_table;
     }
 
-    public CustomerRegistration(ArrayList<Object[]> data){
-        customerGenderBox = new JComboBox();
-        customerGenderBox.addItem("Male");
-        customerGenderBox.addItem("Female");
-        customerGenderBox.addItem("Prefer not to say");
+    public CustomerRegistration(){
 
-        customerPaymentMethodBox = new JComboBox();
-        customerPaymentMethodBox.addItem("TNG ewallet");
-        customerPaymentMethodBox.addItem("Online banking");
-        customerPaymentMethodBox.addItem("Debit card/Bank card");
+        init();
+        data = getData(customerDataFile);
 
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(2, 1));
+        table1 = createTable(data);
+        table1.addMouseListener(this);
+        scrollPane = new JScrollPane(table1);
+        panel.add(scrollPane);
 
-        setLayout(new GridLayout(2, 1));
+        usernameLabel = new JLabel("Username");
+        usernameField = new JTextField();
+        passwordLabel = new JLabel("Password");
+        passwordField = new JTextField();
+        addButton = new JButton("Add");
+        modifyButton = new JButton("Modify");
+        deleteButton = new JButton("Delete");
+        cancelButton = new JButton("Cancel");
+
+        buttonPanel = new JPanel();
+        buttonPanel.setLayout(new GridLayout(6, 1));
+        buttonPanel.add(new JSeparator());
+        buttonPanel.add(new JSeparator());
+        buttonPanel.add(usernameLabel);
+        buttonPanel.add(usernameField);
+        buttonPanel.add(passwordLabel);
+        buttonPanel.add(passwordField);
+        buttonPanel.add(new JSeparator());
+        buttonPanel.add(new JSeparator());
+        buttonPanel.add(addButton);
+        buttonPanel.add(modifyButton);
+        buttonPanel.add(deleteButton);
+        buttonPanel.add(cancelButton);
+        panel.add(buttonPanel);
+
+        setContentPane(panel);
         setSize(900, 500);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        if(data == null){
-            data = new ArrayList<Object[]>();
-            data.add(new Object[]{"Customer_01", "Jason Ong", "01222223333", "TNG ewallet", "Male"});
-            data.add(new Object[]{"Customer_02", "Ella Chen", "12312332232", "Online banking", "Female"});
-
-            table1 = createTable(data);
-            table1.addMouseListener(this);
-            scrollPane = new JScrollPane(table1);
-        }
-        else{
-            overload_table = createTable(data);
-            overload_table.addMouseListener(this);
-            scrollPane = new JScrollPane(overload_table);
-        }
-
-        add(scrollPane);
-        add(customerRegPanel);
-
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
-        finalData = data;
+
         addButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                customerIDString =  customerIDField.getText();
-                customerNameString = customerNameField.getText();
-                customerMobileNumberString = customerMobileNumberField.getText().toString();
-                customerPaymentMethodString = customerPaymentMethodBox.getSelectedItem().toString();
-                customerGenderString = customerGenderBox.getSelectedItem().toString();
-
-                Object[] row = {customerIDString, customerNameString, customerMobileNumberString, customerPaymentMethodString, customerGenderString};
-                finalData.add(row);
-                dispose();
-                CustomerRegistration new_reg = new CustomerRegistration(finalData);
+                usernameString =  usernameField.getText();
+                passwordString = passwordField.getText();
+                boolean check = checkUserAvail(usernameString);
+                if (check){
+                    data.add(new Customer(usernameString, passwordString));
+                    dispose();
+                    saveData(data);
+                    new CustomerRegistration().setVisible(true);
+                }
+                else {
+                    JOptionPane.showMessageDialog(null, "No repeated Username allowed!", "Username repeated", JOptionPane.ERROR_MESSAGE);
+                }
             }
         });
         modifyButton.addActionListener(new ActionListener() {
@@ -112,39 +118,39 @@ public class CustomerRegistration extends JFrame implements MouseListener {
             public void actionPerformed(ActionEvent e) {
                 int selectedIndex = table1.getSelectedRow();
 
-                customerIDString = customerIDField.getText();
-                customerNameString = customerNameField.getText();
-                customerMobileNumberString = customerMobileNumberField.getText();
-                customerPaymentMethodString = customerPaymentMethodBox.getSelectedItem().toString();
-                customerGenderString = customerGenderBox.getSelectedItem().toString();
-                Object[] row = {customerIDString, customerNameString, customerMobileNumberString, customerPaymentMethodString, customerGenderString};
-                finalData.set(selectedIndex, row);
+                usernameString = usernameField.getText();
+                passwordString = passwordField.getText();
+                data.set(selectedIndex, new Customer(usernameString, passwordString));
+                saveData(data);
                 dispose();
-                CustomerRegistration new_reg = new CustomerRegistration(finalData);
+                new CustomerRegistration().setVisible(true);
             }
         });
         deleteButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 int selectedIndex = table1.getSelectedRow();
-                finalData.remove(selectedIndex);
+                data.remove(selectedIndex);
+                saveData(data);
                 dispose();
-                CustomerRegistration new_reg = new CustomerRegistration(finalData);
+                new CustomerRegistration().setVisible(true);
             }
         });
         cancelButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                saveData(data);
                 dispose();
-                AdminMain new_main = new AdminMain();
-                new_main.setVisible(true);
+                new AdminMain().setVisible(true);
             }
         });
-        customerMobileNumberField.addKeyListener(new KeyAdapter() {
+        usernameField.addKeyListener(new KeyAdapter() {
             @Override
             public void keyTyped(KeyEvent e) {
-                char c  = e.getKeyChar();
-                if (!((c >= '0') && (c <= '9') || (c == KeyEvent.VK_BACK_SPACE) || (c == KeyEvent.VK_DELETE) || (c == KeyEvent.VK_MINUS) || (c == '+'))){
+                Character c  = e.getKeyChar();
+                Pattern punct = Pattern.compile("\\p{Punct}");
+                Matcher m = punct.matcher(c.toString());
+                if (m.find()){
                     JOptionPane.showMessageDialog(null, "Please enter valid character!");
                     e.consume();
                 }
@@ -152,63 +158,82 @@ public class CustomerRegistration extends JFrame implements MouseListener {
         });
     }
 
-    public static void main(String[] args){new CustomerRegistration(null).setVisible(true);}
-
-    private void createUIComponents() {
-    }
-
     @Override
     public void mouseClicked(MouseEvent e) {
         int selectedIndex = 0;
         DefaultTableModel model = new DefaultTableModel();
-        if (e.getSource() == table1){
-            model = (DefaultTableModel) table1.getModel();
-            selectedIndex = table1.getSelectedRow();
-        }
-        else if(e.getSource() == overload_table){
-            model = (DefaultTableModel) overload_table.getModel();
-            selectedIndex = overload_table.getSelectedRow();
-        }
-        customerIDField.setText((String) model.getValueAt(selectedIndex, 0));
-        customerNameField.setText(model.getValueAt(selectedIndex, 1).toString());
-        customerMobileNumberField.setText(model.getValueAt(selectedIndex, 2).toString());
-        String value = model.getValueAt(selectedIndex, 3).toString();
-        customerPaymentMethodBox.setSelectedIndex(
-                (value.equals("TNG ewallet") ? 0 :
-                        (value.equals("Online banking") ? 1 :
-                                (value.equals("Debit card/Bank card") ? 2 :
-                                        -1)
-                        )
-                )
-        );
-        value = model.getValueAt(selectedIndex, 4).toString();
-        customerGenderBox.setSelectedIndex(
-                (value.equals("Male") ? 0 :
-                        (value.equals("Female") ? 1 :
-                                (value.equals("Prefer not to say") ? 2 :
-                                        -1)
-                        )
-                )
-        );
-    }
+        model = (DefaultTableModel) table1.getModel();
+        selectedIndex = table1.getSelectedRow();
 
+        usernameField.setText((String) model.getValueAt(selectedIndex, 0));
+        passwordField.setText(model.getValueAt(selectedIndex, 1).toString());
+    }
     @Override
     public void mousePressed(MouseEvent e) {
 
     }
-
     @Override
     public void mouseReleased(MouseEvent e) {
 
     }
-
     @Override
     public void mouseEntered(MouseEvent e) {
 
     }
-
     @Override
     public void mouseExited(MouseEvent e) {
 
     }
+    private ArrayList<Customer> getData(File customerDataFile){
+        ArrayList<Customer> tempData = new ArrayList<Customer>();
+        try {
+            scanner = new Scanner(customerDataFile);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        while (scanner.hasNextLine()){
+            String row = scanner.nextLine();
+            String[] datarow = row.split(":");
+            if (datarow.length != 1){
+                Customer cust = new Customer(datarow[0], datarow[1]);
+                tempData.add(cust);
+            }
+        }
+        scanner.close();
+
+        return tempData;
+    }
+    private void init(){
+        try {
+            customerDataFile.createNewFile();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    private void saveData(ArrayList<Customer> data){
+        try {
+            FileWriter writer = new FileWriter(customerDataFile, false);
+            int count = 1;
+            for (Customer cust : data){
+                String row = cust.username + ":" + cust.password + "\n";
+                if (count == data.size())
+                    row += "\n";
+                writer.write(row);
+                count++;
+            }
+            writer.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+    private boolean checkUserAvail(String username){
+        for (Customer cust : data){
+            if (cust.username.equals(username)){
+                return false;
+            }
+        }
+        return true;
+    }
+
 }

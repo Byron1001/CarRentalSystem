@@ -27,9 +27,8 @@ public class AdminMain extends JFrame {
         customerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                CustomerRegistration reg = new CustomerRegistration(null);
+                new CustomerRegistration().setVisible(true);
                 hide();
-                reg.setVisible(true);
             }
         });
         rentalButton.addActionListener(new ActionListener() {
@@ -37,7 +36,7 @@ public class AdminMain extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 RentalManagement reg = null;
                 try {
-                    reg = new RentalManagement(null, null);
+                    reg = new RentalManagement();
                 } catch (ParseException ex) {
                     throw new RuntimeException(ex);
                 }
@@ -48,9 +47,12 @@ public class AdminMain extends JFrame {
         returnButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                CarRegistration reg = new CarRegistration();
+                try {
+                    new ReturnManagement().setVisible(true);
+                } catch (ParseException ex) {
+                    throw new RuntimeException(ex);
+                }
                 hide();
-                reg.setVisible(true);
             }
         });
         logoutButton.addActionListener(new ActionListener() {
@@ -67,9 +69,5 @@ public class AdminMain extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(900, 500);
         setLocationRelativeTo(null);
-    }
-
-    public JFrame getMainFrame(){
-        return this;
     }
 }
