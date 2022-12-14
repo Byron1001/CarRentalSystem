@@ -2,6 +2,8 @@ package Customer;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -58,6 +60,15 @@ public class CustomerBookingHistory extends JFrame{
             mainPanel.add(new JLabel());
         }
         mainPanel.add(new JLabel("History print finish."), JPanel.CENTER_ALIGNMENT);
+        JButton backButton = new JButton("Back to main menu");
+        mainPanel.add(backButton);
+        backButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new CustomerMain().setVisible(true);
+                dispose();
+            }
+        });
         JScrollPane scrollPane = new JScrollPane(mainPanel);
         setContentPane(scrollPane);
         setSize(new Dimension(900, 500));
@@ -77,9 +88,9 @@ public class CustomerBookingHistory extends JFrame{
             String row = scanner.nextLine();
             String[] rowData = row.split(":");
             if (rowData.length > 1 && username.equals(rowData[0])){
-                String labelData = "Car ID: " + rowData[1] + "\n" + "Rental date: " + rowData[2] + "\n"
-                        + "Return date: " + rowData[3] + "\n" + "Return process finished: " + rowData[4] + "\n"
-                        + "Payment made: " + rowData[5] + "\n";
+                String labelData = "Car ID: " + rowData[1] + "\n\n" + "Rental date: " + rowData[2] + "\n\n"
+                        + "Return date: " + rowData[3] + "\n\n" + "Return process finished: " + rowData[4] + "\n\n"
+                        + "Payment made: " + rowData[5] + "\n\n";
                 tempData.add(labelData);
             }
         }
@@ -98,9 +109,9 @@ public class CustomerBookingHistory extends JFrame{
             String row = scanner.nextLine();
             String[] rowData = row.split(":");
             if (username.equals(rowData[0]) && rowData.length > 1){
-                String labelData = "Car ID :" + rowData[1] + "\n" + "Rental date: " + rowData[2] + "\n" +
-                        "Due Date: " + rowData[3] + "\n" + "Return Date: " + rowData[4] + "\n" +
-                        "Return process finished: " + rowData[5] + "\n" + "Payment made: " + rowData[6] + "\n";
+                String labelData = "Car ID :" + rowData[1] + "\n\n" + "Rental date: " + rowData[2] + "\n\n" +
+                        "Due Date: " + rowData[3] + "\n\n" + "Return Date: " + rowData[4] + "\n\n" +
+                        "Return process finished: " + rowData[5] + "\n\n" + "Payment made: " + rowData[6] + "\n\n";
                 tempData.add(labelData);
             }
         }
@@ -119,9 +130,9 @@ public class CustomerBookingHistory extends JFrame{
             String row = scanner.nextLine();
             String[] rowData = row.split(":");
             if (username.equals(rowData[0]) && rowData.length > 1){
-                String labelData = "Rented Car ID: " + rowData[1] + "\n" + "Return date: " + rowData[2] + "\n" +
-                        "Rental days: " + rowData[3] + "\n" + "Delay days: " + rowData[4] + "\n" +
-                        "Rental fees: " + rowData[5] + "\n" + "Return delay fine: " + rowData[6] + "\n" + "Payment made" + rowData[7] + "\n";
+                String labelData = "Rented Car ID: " + rowData[1] + "\n\n" + "Return date: " + rowData[2] + "\n\n" +
+                        "Rental days: " + rowData[3] + "\n\n" + "Delay days: " + rowData[4] + "\n\n" +
+                        "Rental fees: " + rowData[5] + "\n\n" + "Return delay fine: " + rowData[6] + "\n\n" + "Payment made" + rowData[7] + "\n\n";
                 tempData.add(labelData);
             }
 

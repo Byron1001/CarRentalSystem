@@ -15,6 +15,7 @@ public class AdminMain extends JFrame {
     private JButton returnButton;
     private JButton logoutButton;
     private JPanel mainPanel;
+    private JButton generateReportButton;
 
     public AdminMain(){
         carRegistrationButton.addActionListener(new ActionListener() {
@@ -69,5 +70,9 @@ public class AdminMain extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(900, 500);
         setLocationRelativeTo(null);
+    }
+
+    public static void main(String[] args){
+        new AdminMain().setVisible(true);
     }
 }

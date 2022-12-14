@@ -190,6 +190,9 @@ public class CustomerPayment extends JFrame{
         for (Object[] dd : returnHistoryData){
             if(dd[0].equals(username) && dd[1].equals(carID) && dd[4].equals(returnDate))
                 return returnHistoryData.indexOf(dd);
+            System.out.println(returnHistoryData.indexOf(dd));
+            System.out.println(username);
+            System.out.println(carID);
             System.out.println(Arrays.toString(dd));
             System.out.println(returnDate);
         }
