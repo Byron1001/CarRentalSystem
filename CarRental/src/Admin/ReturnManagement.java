@@ -181,27 +181,27 @@ public class ReturnManagement extends JFrame{
                 boolean check = checkUserAvail(rent[0].toString());
                 if (check){
                     Object[] car = carData.get(selectedIndex);
-                    rentData.remove(rent);
                     car[3] = "Yes";
                     carData.remove(selectedIndex);
                     carData.add(car);
+                    rentData.remove(selectedIndex);
                     returnData.add(rent);
                     saveData(rentData, bookingHistoryFile);
                     saveData(carData, carDataFile);
                     saveData(returnData, returnHistoryFile);
                     try {
-                        int delay = dateCount(returnDateField.getText(), dueDateField.getText());
-                        int rentDay = dateCount(rentalDateField.getText(), returnDateField.getText());
+                        int delay = fineDateCount(returnDateField.getText(), dueDateField.getText());
+                        int rentDay = rentalDateCount(rentalDateField.getText(), returnDateField.getText());
                         Object[] payment = {customerIDField.getText(), carIDField.getText(), rentDay, delay, rentDay*20, delay*50};
                         String message = "Customer ID: " + customerIDField.getText() + "\n" +
                                 "Car ID: " + carIDField.getText() + "\n" +
                                 "Rental date: " + rentalDateField.getText() + "\n" +
                                 "Return date: " + returnDateField.getText() + "\n" +
                                 "Due date: " + dueDateField.getText() + "\n" +
-                                "Your rental payment:" + payment[3] + "\n" +
-                                "Your fine payment:" + payment[4] + "\n";
-                        JOptionPane.showMessageDialog(null, message, "Rental summary", JOptionPane.INFORMATION_MESSAGE);
+                                "Your rental payment:" + payment[4] + "\n" +
+                                "Your fine payment:" + payment[5] + "\n";
                         addPayment(payment);
+                        JOptionPane.showMessageDialog(null, message, "Rental summary", JOptionPane.INFORMATION_MESSAGE);
                     } catch (ParseException ex) {
                         throw new RuntimeException(ex);
                     }
@@ -215,9 +215,8 @@ public class ReturnManagement extends JFrame{
                     rental.setVisible(true);
                     dispose();
                 }
-                else {
+                else
                     JOptionPane.showMessageDialog(null, "Username error", "Username error", JOptionPane.ERROR_MESSAGE);
-                }
             }
         });
 
@@ -267,8 +266,14 @@ public class ReturnManagement extends JFrame{
             if (file == bookingHistoryFile || file == returnHistoryFile){
                 String[] data = row.split(":", 7);
                 if (data.length > 1){
-                    Object[] da = {data[0], data[1], data[2], data[3], data[4], data[5], data[6]};
-                    tempData.add(da);
+                    if (file == bookingHistoryFile){
+                        Object[] da = {data[0], data[1], data[2], data[3], data[4], data[5], data[6]};
+                        tempData.add(da);
+                    }
+                    if (file == returnHistoryFile){
+                        Object[] da = {data[0], data[1], data[2], data[3], data[4], data[5]};
+                        tempData.add(da);
+                    }
                 }
             }
             else {
@@ -287,11 +292,11 @@ public class ReturnManagement extends JFrame{
         try {
             FileWriter writer = new FileWriter(file, false);
             for(Object[] ob:data){
-//                System.out.println(Arrays.toString(ob));
                 String whole = ob[0] + ":" + ob[1] + ":" + ob[2] + ":" + ob[3];
-                if (file == bookingHistoryFile || file == returnHistoryFile){
+                if (file == bookingHistoryFile)
                     whole += ":" + ob[4] + ":" + ob[5] + ":" + ob[6];
-                }
+                if (file == returnHistoryFile)
+                    whole += ":" + ob[4] + ":" + ob[5];
                 whole += "\n";
                 if(ob.length == data.indexOf(ob) + 1){
                     whole += "\n";
@@ -328,21 +333,34 @@ public class ReturnManagement extends JFrame{
             for(int i = 1;i < payment.length;i++){
                 whole = whole + ":" + payment[i].toString();
             }
+            whole += ":No\n";
+            writer.write(whole);
             writer.close();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    protected static int dateCount(String returnDate, String dueDate) throws ParseException {
+    protected static int fineDateCount(String returnDate, String dueDate) throws ParseException {
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH);
         Date returnD = formatter.parse(returnDate);
         Date due = formatter.parse(dueDate);
 
         long diffInMil = returnD.getTime() - due.getTime();
-        if (diffInMil > 0){
+        if (diffInMil < 0)
             return 0;
-        }
+        long diff = Math.abs(TimeUnit.DAYS.convert(diffInMil, TimeUnit.MILLISECONDS));
+        return (int) diff;
+    }
+
+    protected static int rentalDateCount(String returnDate, String dueDate) throws ParseException {
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH);
+        Date returnD = formatter.parse(returnDate);
+        Date due = formatter.parse(dueDate);
+
+        long diffInMil = returnD.getTime() - due.getTime();
+        if (diffInMil > 0)
+            return 0;
         long diff = Math.abs(TimeUnit.DAYS.convert(diffInMil, TimeUnit.MILLISECONDS));
         return (int) diff;
     }

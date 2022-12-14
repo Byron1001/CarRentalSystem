@@ -10,6 +10,11 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Scanner;
 
 public class Login extends JFrame{
@@ -20,6 +25,7 @@ public class Login extends JFrame{
     private JButton loginButton;
     String row;
     String[] credentials;
+    File loginHistoryFile = new File("./CarRental/src/Data/Login History.txt");
 
     private void createUIComponents() {
         UsernameField = new JTextField();
@@ -58,7 +64,32 @@ public class Login extends JFrame{
         return 0;
     }
 
+    private void init(){
+        try {
+            loginHistoryFile.createNewFile();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void loginRecord(String username, int credentials){
+        try {
+            FileWriter writer = new FileWriter(loginHistoryFile);
+            String record = LocalDate.now() + "|" + LocalTime.now() + "|" + username;
+            if (credentials == 1)
+                record = record + "|" + "User";
+            else if (credentials == 2)
+                record = record + "|" + "Admin";
+            record += "\n";
+            writer.write(record);
+            writer.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public Login(){
+        init();
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -68,9 +99,11 @@ public class Login extends JFrame{
 
                 if (check == 2){
                     new AdminMain().setVisible(true);
+                    loginRecord(username, check);
                     dispose();
                 } else if (check == 1) {
                     new CustomerMain().setVisible(true);
+                    loginRecord(username, check);
                     dispose();
                 } else {
                     JOptionPane.showMessageDialog(null, "Username or Password do not match.");

@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
+import java.text.ParseException;
 
 public class CustomerMain extends JFrame{
     private JLabel advertisementLabel;
@@ -25,7 +27,11 @@ public class CustomerMain extends JFrame{
         bookYourCarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new CarBooking().setVisible(true);
+                try {
+                    new CarBooking().setVisible(true);
+                } catch (ParseException ex) {
+                    throw new RuntimeException(ex);
+                }
                 dispose();
             }
         });
