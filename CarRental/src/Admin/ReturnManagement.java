@@ -180,9 +180,10 @@ public class ReturnManagement extends JFrame{
                 Object[] rent = {customerIDField.getText(), carIDField.getText(), rentalDateField.getText(), dueDateField.getText(), returnDateField.getText(), "Yes", "No"};
                 boolean check = checkUserAvail(rent[0].toString());
                 if (check){
-                    Object[] car = carData.get(selectedIndex);
+                    int carIndex = getCarIndex(carIDField.getText(), carData);
+                    Object[] car = carData.get(carIndex);
                     car[3] = "Yes";
-                    carData.remove(selectedIndex);
+                    carData.remove(carIndex);
                     carData.add(car);
                     rentData.remove(selectedIndex);
                     returnData.add(rent);
@@ -192,7 +193,7 @@ public class ReturnManagement extends JFrame{
                     try {
                         int delay = fineDateCount(returnDateField.getText(), dueDateField.getText());
                         int rentDay = rentalDateCount(rentalDateField.getText(), returnDateField.getText());
-                        Object[] payment = {customerIDField.getText(), carIDField.getText(), rentDay, delay, rentDay*20, delay*50};
+                        Object[] payment = {customerIDField.getText(), carIDField.getText(), returnDateField.getText(), rentDay, delay, rentDay*20, delay*50};
                         String message = "Customer ID: " + customerIDField.getText() + "\n" +
                                 "Car ID: " + carIDField.getText() + "\n" +
                                 "Rental date: " + rentalDateField.getText() + "\n" +
@@ -271,7 +272,7 @@ public class ReturnManagement extends JFrame{
                         tempData.add(da);
                     }
                     if (file == returnHistoryFile){
-                        Object[] da = {data[0], data[1], data[2], data[3], data[4], data[5]};
+                        Object[] da = {data[0], data[1], data[2], data[3], data[4], data[5], data[6]};
                         tempData.add(da);
                     }
                 }
@@ -296,7 +297,7 @@ public class ReturnManagement extends JFrame{
                 if (file == bookingHistoryFile)
                     whole += ":" + ob[4] + ":" + ob[5] + ":" + ob[6];
                 if (file == returnHistoryFile)
-                    whole += ":" + ob[4] + ":" + ob[5];
+                    whole += ":" + ob[4] + ":" + ob[5] + ":" + ob[6];
                 whole += "\n";
                 if(ob.length == data.indexOf(ob) + 1){
                     whole += "\n";
@@ -353,6 +354,13 @@ public class ReturnManagement extends JFrame{
         return (int) diff;
     }
 
+    private int getCarIndex(String carID, ArrayList<Object[]> carData){
+        for (Object[] d : carData){
+            if (carID.equals(d[0]))
+                return carData.indexOf(d);
+        }
+        return -1;
+    }
     protected static int rentalDateCount(String returnDate, String dueDate) throws ParseException {
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH);
         Date returnD = formatter.parse(returnDate);

@@ -1,5 +1,6 @@
 package Admin;
 
+import javax.print.attribute.standard.JobKOctetsProcessed;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.MaskFormatter;
@@ -169,28 +170,33 @@ public class RentalManagement extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 int selectedIndex = rentTable.getSelectedRow();
-                Object[] data = rentData.get(selectedIndex);
-                data[0] = customerIDField.getText();
-                data[1] = carIDField.getText();
-                data[2] = rentalDateField.getText();
-                data[3] = dueDateField.getText();
-
-                boolean check = checkUserAvail(data[0].toString());
-                boolean check2 = checkCarAvail(data[1].toString());
-                if (check && check2){
-                    rentData.remove(selectedIndex);
-                    rentData.add(data);
-                    saveData(rentData, bookingHistoryFile);
-                    RentalManagement reg = null;
-                    try {
-                        new RentalManagement().setVisible(true);
-                    } catch (ParseException ex) {
-                        throw new RuntimeException(ex);
-                    }
-                    dispose();
+                if (selectedIndex == -1){
+                    JOptionPane.showMessageDialog(null, "Please choose the car!", "error", JOptionPane.ERROR_MESSAGE);
                 }
-                else {
-                    JOptionPane.showMessageDialog(null, "Car ID or Customer ID not existed", "Input error", JOptionPane.ERROR_MESSAGE);
+                else{
+                    Object[] data = rentData.get(selectedIndex);
+                    data[0] = customerIDField.getText();
+                    data[1] = carIDField.getText();
+                    data[2] = rentalDateField.getText();
+                    data[3] = dueDateField.getText();
+
+                    boolean check = checkUserAvail(data[0].toString());
+                    boolean check2 = checkCarAvail(data[1].toString());
+                    if (check && check2){
+                        rentData.remove(selectedIndex);
+                        rentData.add(data);
+                        saveData(rentData, bookingHistoryFile);
+                        RentalManagement reg = null;
+                        try {
+                            new RentalManagement().setVisible(true);
+                        } catch (ParseException ex) {
+                            throw new RuntimeException(ex);
+                        }
+                        dispose();
+                    }
+                    else {
+                        JOptionPane.showMessageDialog(null, "Car ID or Customer ID not existed", "Input error", JOptionPane.ERROR_MESSAGE);
+                    }
                 }
             }
         });
@@ -201,27 +207,32 @@ public class RentalManagement extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 int selectedIndex = availableTable.getSelectedRow();
-                Object[] rent = {customerIDField.getText(), carIDField.getText(), rentalDateField.getText(), dueDateField.getText(), "00-00-0000", "No", "No"};
-                boolean check = checkUserAvail(rent[0].toString());
-                if (check){
-                    Object[] car = carData.get(selectedIndex);
-                    rentData.add(rent);
-                    car[3] = "No";
-                    carData.remove(selectedIndex);
-                    carData.add(car);
-                    saveData(rentData, bookingHistoryFile);
-                    saveData(carData, carDataFile);
-                    RentalManagement rental = null;
-                    try {
-                        rental = new RentalManagement();
-                    } catch (ParseException ex) {
-                        throw new RuntimeException(ex);
-                    }
-                    rental.setVisible(true);
-                    dispose();
+                if (selectedIndex == -1){
+                    JOptionPane.showMessageDialog(null, "Please choose the rental record!", "error", JOptionPane.ERROR_MESSAGE);
                 }
-                else {
-                    JOptionPane.showMessageDialog(null, "Username error", "Username error", JOptionPane.ERROR_MESSAGE);
+                else{
+                    Object[] rent = {customerIDField.getText(), carIDField.getText(), rentalDateField.getText(), dueDateField.getText(), "00-00-0000", "No", "No"};
+                    boolean check = checkUserAvail(rent[0].toString());
+                    if (check){
+                        Object[] car = carData.get(selectedIndex);
+                        rentData.add(rent);
+                        car[3] = "No";
+                        carData.remove(selectedIndex);
+                        carData.add(car);
+                        saveData(rentData, bookingHistoryFile);
+                        saveData(carData, carDataFile);
+                        RentalManagement rental = null;
+                        try {
+                            rental = new RentalManagement();
+                        } catch (ParseException ex) {
+                            throw new RuntimeException(ex);
+                        }
+                        rental.setVisible(true);
+                        dispose();
+                    }
+                    else {
+                        JOptionPane.showMessageDialog(null, "Username error", "Username error", JOptionPane.ERROR_MESSAGE);
+                    }
                 }
             }
         });
@@ -232,20 +243,25 @@ public class RentalManagement extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 int selectedIndex = rentTable.getSelectedRow();
-                String carID = rentData.get(selectedIndex)[1].toString();
-                for (Object[] car : carData) {
-                    if (car[0].equals(carID)) {
-                        car[3] = "Yes";
-                        rentData.remove(selectedIndex);
-                    }
+                if (selectedIndex == -1 || customerIDField.getText().equals("")){
+                    JOptionPane.showMessageDialog(null, "Please choose the rental record!", "error", JOptionPane.ERROR_MESSAGE);
                 }
-                saveData(rentData, bookingHistoryFile);
-                saveData(carData, carDataFile);
-                try {
-                    new RentalManagement().setVisible(true);
-                    dispose();
-                } catch (ParseException ex) {
-                    throw new RuntimeException(ex);
+                else{
+                    String carID = rentData.get(selectedIndex)[1].toString();
+                    for (Object[] car : carData) {
+                        if (car[0].equals(carID)) {
+                            car[3] = "Yes";
+                            rentData.remove(selectedIndex);
+                        }
+                    }
+                    saveData(rentData, bookingHistoryFile);
+                    saveData(carData, carDataFile);
+                    try {
+                        new RentalManagement().setVisible(true);
+                        dispose();
+                    } catch (ParseException ex) {
+                        throw new RuntimeException(ex);
+                    }
                 }
             }
         });

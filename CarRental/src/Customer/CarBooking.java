@@ -9,6 +9,7 @@ import java.awt.event.ActionListener;
 import java.io.*;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Formatter;
 import java.util.Scanner;
 
@@ -103,14 +104,27 @@ public class CarBooking extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 int selectedIndex = table1.getSelectedRow();
-                Object[] change = data.get(selectedIndex);
-//                change[change.length - 1] = "No";
-                data.remove(selectedIndex);
-                data.add(change);
-                saveData(data, carDataFile);
-                String username = getUsername(loginHistoryFile);
-//                System.out.println(username);
-                String prefix = fromField.getText() + toField.getText();
+                if (selectedIndex == -1){
+                    JOptionPane.showMessageDialog(null, "Please choose the car.", "Car choosing", JOptionPane.ERROR_MESSAGE);
+                }
+                else {
+                    Object[] change = data.get(selectedIndex);
+                    change[change.length - 1] = "No";
+                    data.remove(selectedIndex);
+                    data.add(change);
+                    saveData(data, carDataFile);
+                    String username = getUsername(loginHistoryFile);
+                    String carID = data.get(selectedIndex)[0].toString();
+                    String prefix = username + ":" + carID + ":" + fromField.getText() + ":" + toField.getText();
+                    saveBookingHistory(prefix);
+                    JOptionPane.showMessageDialog(null, "Successfully book the car " + carID, "Booking", JOptionPane.INFORMATION_MESSAGE);
+                    try {
+                        new CarBooking().setVisible(true);
+                    } catch (ParseException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                    dispose();
+                }
             }
         });
         cancelButton.addActionListener(new ActionListener() {
@@ -157,21 +171,30 @@ public class CarBooking extends JFrame{
         }
     }
 
-    private String getUsername(File loginHistoryFile){
+    public static String getUsername(File loginHistoryFile){
         String username = null;
+        Scanner scanner1 = null;
         try {
-            scanner = new Scanner(loginHistoryFile);
+            scanner1 = new Scanner(loginHistoryFile);
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
-        String row = scanner.nextLine();
-        String[] record = row.split("|", 4);
+        String row = scanner1.nextLine();
+        String[] record = row.split("/");
         username = record[2];
         return username;
     }
 
-    private void saveBookingHistory(){
-        String suffix = ":00-00-0000:No:No";
+    private void saveBookingHistory(String prefix){
+        String suffix = ":00-00-0000:No:No\n";
+        String row = prefix + suffix;
+        try {
+            FileWriter writer = new FileWriter(bookingHistoryFile, true);
+            writer.write(row);
+            writer.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }

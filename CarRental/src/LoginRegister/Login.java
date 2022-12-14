@@ -75,11 +75,11 @@ public class Login extends JFrame{
     private void loginRecord(String username, int credentials){
         try {
             FileWriter writer = new FileWriter(loginHistoryFile);
-            String record = LocalDate.now() + "|" + LocalTime.now() + "|" + username;
+            String record = LocalDate.now() + "/" + LocalTime.now() + "/" + username;
             if (credentials == 1)
-                record = record + "|" + "User";
+                record = record + "/" + "User";
             else if (credentials == 2)
-                record = record + "|" + "Admin";
+                record = record + "/" + "Admin";
             record += "\n";
             writer.write(record);
             writer.close();

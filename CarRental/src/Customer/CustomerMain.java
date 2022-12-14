@@ -1,5 +1,7 @@
 package Customer;
 
+import LoginRegister.Login;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -38,14 +40,41 @@ public class CustomerMain extends JFrame{
         returnTheCarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new CarReturn().setVisible(true);
+                try {
+                    new CarReturn().setVisible(true);
+                } catch (ParseException ex) {
+                    throw new RuntimeException(ex);
+                }
                 dispose();
             }
         });
+
         setVisible(true);
         setSize(new Dimension(900, 500));
         setContentPane(customerMainPanel);
         setLocationRelativeTo(null);
+        makePaymentButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new CustomerPayment().setVisible(true);
+                dispose();
+            }
+        });
+        bookingHistoryButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new CustomerBookingHistory().setVisible(true);
+                dispose();
+            }
+        });
+        logoutButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(null, "See you again.", "Logout", JOptionPane.INFORMATION_MESSAGE);
+                new Login().setVisible(true);
+                dispose();
+            }
+        });
     }
 
     public static void main(String[] args){

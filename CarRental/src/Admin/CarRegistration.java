@@ -64,7 +64,8 @@ public class CarRegistration extends JFrame implements MouseListener {
             while(scanner.hasNextLine()){
                 String row = scanner.nextLine();
                 Object[] carData = row.split(":", 4);
-                finalData.add(carData);
+                if (carData.length > 1)
+                    finalData.add(carData);
             }
             scanner.close();
         } catch (FileNotFoundException e) {
@@ -78,6 +79,7 @@ public class CarRegistration extends JFrame implements MouseListener {
         add(carRegPanel);
         setVisible(true);
         setLocationRelativeTo(null);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         addButton.addActionListener(new ActionListener() {
             @Override
@@ -183,9 +185,13 @@ public class CarRegistration extends JFrame implements MouseListener {
             writer = new FileWriter(carDataFile);
             BufferedWriter bufferedWriter = new BufferedWriter(writer);
             PrintWriter printWriter = new PrintWriter(bufferedWriter);
+            int count = 0;
             for(Object[] car : data){
-                String row = car[0] + car[1].toString() + car[2] + car[3];
+                String row = car[0] + ":" + car[1].toString() + ":" + car[2] + ":" + car[3];
+                if (count == data.size() - 1)
+                    row += "\n";
                 printWriter.println(row);
+                count++;
             }
             printWriter.close();
             bufferedWriter.close();
