@@ -233,7 +233,7 @@ public class RentalManagement extends JFrame{
                             throw new RuntimeException(ex);
                         }
                         rental.setVisible(true);
-                        JOptionPane.showMessageDialog(null, "Car rental success.\nPlease ask customer to make payment before getting the car.", "Car rental successful", JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.showMessageDialog(null, "Car rental success.", "Car rental successful", JOptionPane.INFORMATION_MESSAGE);
                         dispose();
                     }
                     else {
@@ -388,10 +388,6 @@ public class RentalManagement extends JFrame{
         }
         scanner.close();
         return false;
-    }
-
-    public static void main(String[] args) throws ParseException {
-        new RentalManagement().setVisible(true);
     }
 
 }

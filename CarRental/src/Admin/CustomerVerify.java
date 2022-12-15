@@ -285,8 +285,4 @@ public class CustomerVerify extends JFrame implements MouseListener {
         return true;
     }
 
-    public static void main(String[] args){
-        new CustomerVerify().setVisible(true);
-    }
-
 }

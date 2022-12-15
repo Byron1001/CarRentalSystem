@@ -75,9 +75,13 @@ public class CustomerMain extends JFrame{
                 dispose();
             }
         });
+        latestNotificationButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new LatestNotification().setVisible(true);
+                dispose();
+            }
+        });
     }
 
-    public static void main(String[] args){
-        new CustomerMain().setVisible(true);
-    }
 }

@@ -134,11 +134,11 @@ public class CarBooking extends JFrame{
                 else {
                     Object[] change = data.get(selectedIndex);
                     change[change.length - 1] = "No";
+                    String carID = data.get(selectedIndex)[0].toString();
                     data.remove(selectedIndex);
                     data.add(change);
                     saveData(data, carDataFile);
                     String username = getUsername(loginHistoryFile);
-                    String carID = data.get(selectedIndex)[0].toString();
                     String prefix = username + ":" + carID + ":" + fromField.getText() + ":" + toField.getText();
                     saveBookingHistory(prefix);
                     JOptionPane.showMessageDialog(null, "Successfully book the car " + carID, "Booking", JOptionPane.INFORMATION_MESSAGE);
@@ -165,10 +165,6 @@ public class CarBooking extends JFrame{
         setTitle("Customer Car Booking");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
-    }
-
-    public static void main(String[] args) throws ParseException {
-        new CarBooking().setVisible(true);
     }
 
     private void init(){
@@ -204,9 +200,11 @@ public class CarBooking extends JFrame{
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
-        String row = scanner1.nextLine();
-        String[] record = row.split("/");
-        username = record[2];
+        while(scanner1.hasNextLine()){
+            String row = scanner1.nextLine();
+            String[] record = row.split("/");
+            username = record[2];
+        }
         return username;
     }
 

@@ -7,12 +7,13 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class CustomerBookingHistory extends JFrame{
     private String username;
     private Scanner scanner;
-    private ArrayList<String> bookingHistoryData, returnHistoryData, paymentHistoryData;
+    private ArrayList<String[]> bookingHistoryData, returnHistoryData, paymentHistoryData, loginHistoryData;
     File loginHistoryFile = new File("./CarRental/src/Data/Login History.txt");
     File paymentFile = new File("./CarRental/src/Data/Payment.txt");
     File returnHistoryFile = new File("./CarRental/src/Data/Return History.txt");
@@ -25,9 +26,11 @@ public class CustomerBookingHistory extends JFrame{
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
-        String row = scanner1.nextLine();
-        String[] record = row.split("/");
-        username = record[2];
+        while (scanner1.hasNextLine()){
+            String row = scanner1.nextLine();
+            String[] record = row.split("/");
+            username = record[2];
+        }
         return username;
     }
     public CustomerBookingHistory(){
@@ -35,30 +38,47 @@ public class CustomerBookingHistory extends JFrame{
         bookingHistoryData = getBookingHistory(username);
         returnHistoryData = getReturnHistory(username);
         paymentHistoryData = getPaymentHistory(username);
+        loginHistoryData = getLoginHistory(username);
 
         JPanel mainPanel = new JPanel();
-        mainPanel.setLayout(new GridLayout(1000, 1));
+        mainPanel.setLayout(new GridLayout(100, 1));
 
         mainPanel.add(new JLabel());
         mainPanel.add(new JLabel("Car Booking History"));
-        for(String data : bookingHistoryData){
-            mainPanel.add(new JLabel(data));
+        for(String[] data : bookingHistoryData){
+            for (int i = 1; i < data.length;i++){
+                mainPanel.add(new JLabel(data[i]));
+            }
             mainPanel.add(new JLabel());
         }
         mainPanel.add(new JLabel());
         mainPanel.add(new JLabel("Car Return History"));
 
-        for(String data : returnHistoryData){
-            mainPanel.add(new JLabel(data));
+        for(String[] data : returnHistoryData){
+            for (int i = 1; i < data.length;i++){
+                mainPanel.add(new JLabel(data[i]));
+            }
             mainPanel.add(new JLabel());
         }
 
         mainPanel.add(new JLabel());
         mainPanel.add(new JLabel("Payment made History"));
-        for(String data : paymentHistoryData){
-            mainPanel.add(new JLabel(data));
+        for(String[] data : paymentHistoryData){
+            for (int i = 1; i < data.length;i++){
+                mainPanel.add(new JLabel(data[i]));
+            }
             mainPanel.add(new JLabel());
         }
+
+        mainPanel.add(new JLabel());
+        mainPanel.add(new JLabel("Login History"));
+        for(String[] data : paymentHistoryData){
+            for (int i = 1; i < data.length;i++){
+                mainPanel.add(new JLabel(data[i]));
+            }
+            mainPanel.add(new JLabel());
+        }
+
         mainPanel.add(new JLabel("History print finish."), JPanel.CENTER_ALIGNMENT);
         JButton backButton = new JButton("Back to main menu");
         mainPanel.add(backButton);
@@ -77,8 +97,8 @@ public class CustomerBookingHistory extends JFrame{
         setVisible(true);
 
     }
-    private ArrayList<String> getBookingHistory(String username){
-        ArrayList<String> tempData = new ArrayList<>();
+    private ArrayList<String[]> getBookingHistory(String username){
+        ArrayList<String[]> tempData = new ArrayList<>();
         try {
             scanner = new Scanner(bookingHistoryFile);
         } catch (FileNotFoundException e) {
@@ -88,9 +108,11 @@ public class CustomerBookingHistory extends JFrame{
             String row = scanner.nextLine();
             String[] rowData = row.split(":");
             if (rowData.length > 1 && username.equals(rowData[0])){
-                String labelData = "Car ID: " + rowData[1] + "\n\n" + "Rental date: " + rowData[2] + "\n\n"
-                        + "Return date: " + rowData[3] + "\n\n" + "Return process finished: " + rowData[4] + "\n\n"
-                        + "Payment made: " + rowData[5] + "\n\n";
+                String[] labelData = {"Car ID: " + rowData[1],
+                "Rental date: " + rowData[2],
+                        "Due date: " + rowData[3],
+                        "Return process finished: " + rowData[5],
+                        "Payment made: " + rowData[6]};
                 tempData.add(labelData);
             }
         }
@@ -98,8 +120,8 @@ public class CustomerBookingHistory extends JFrame{
         return tempData;
     }
 
-    private ArrayList<String> getReturnHistory(String username){
-        ArrayList<String> tempData = new ArrayList<>();
+    private ArrayList<String[]> getReturnHistory(String username){
+        ArrayList<String[]> tempData = new ArrayList<>();
         try {
             scanner = new Scanner(returnHistoryFile);
         } catch (FileNotFoundException e) {
@@ -109,9 +131,12 @@ public class CustomerBookingHistory extends JFrame{
             String row = scanner.nextLine();
             String[] rowData = row.split(":");
             if (username.equals(rowData[0]) && rowData.length > 1){
-                String labelData = "Car ID :" + rowData[1] + "\n\n" + "Rental date: " + rowData[2] + "\n\n" +
-                        "Due Date: " + rowData[3] + "\n\n" + "Return Date: " + rowData[4] + "\n\n" +
-                        "Return process finished: " + rowData[5] + "\n\n" + "Payment made: " + rowData[6] + "\n\n";
+                String[] labelData = {"Car ID :" + rowData[1],
+                "Rental date: " + rowData[2],
+                        "Due Date: " + rowData[3],
+                        "Return Date: " + rowData[4],
+                        "Return process finished: " + rowData[5],
+                        "Payment made: " + rowData[6]};
                 tempData.add(labelData);
             }
         }
@@ -119,8 +144,8 @@ public class CustomerBookingHistory extends JFrame{
         return tempData;
     }
 
-    private ArrayList<String> getPaymentHistory(String username){
-        ArrayList<String> tempData = new ArrayList<>();
+    private ArrayList<String[]> getPaymentHistory(String username){
+        ArrayList<String[]> tempData = new ArrayList<>();
         try {
             scanner = new Scanner(paymentFile);
         } catch (FileNotFoundException e) {
@@ -130,9 +155,13 @@ public class CustomerBookingHistory extends JFrame{
             String row = scanner.nextLine();
             String[] rowData = row.split(":");
             if (username.equals(rowData[0]) && rowData.length > 1){
-                String labelData = "Rented Car ID: " + rowData[1] + "\n\n" + "Return date: " + rowData[2] + "\n\n" +
-                        "Rental days: " + rowData[3] + "\n\n" + "Delay days: " + rowData[4] + "\n\n" +
-                        "Rental fees: " + rowData[5] + "\n\n" + "Return delay fine: " + rowData[6] + "\n\n" + "Payment made" + rowData[7] + "\n\n";
+                String[] labelData = {"Rented Car ID: " + rowData[1],
+                        "Return date: " + rowData[2],
+                        "Rental days: " + rowData[3],
+                        "Delay days: " + rowData[4],
+                        "Rental fees: " + rowData[5],
+                        "Return delay fine: " + rowData[6],
+                        "Payment made" + rowData[7]};
                 tempData.add(labelData);
             }
 
@@ -140,8 +169,30 @@ public class CustomerBookingHistory extends JFrame{
         scanner.close();
         return tempData;
     }
-    public static void main(String[] args){
-        new CustomerBookingHistory().setVisible(true);
+    private ArrayList<String[]> getLoginHistory(String username){
+        ArrayList<String[]> tempData = new ArrayList<>();
+        try {
+            scanner = new Scanner(loginHistoryFile);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        while (scanner.hasNextLine()){
+            String row = scanner.nextLine();
+            String[] rowData = row.split(":");
+            if (username.equals(rowData[0]) && rowData.length > 1){
+                String[] labelData = {"Rented Car ID: " + rowData[1],
+                        "Return date: " + rowData[2],
+                        "Rental days: " + rowData[3],
+                        "Delay days: " + rowData[4],
+                        "Rental fees: " + rowData[5],
+                        "Return delay fine: " + rowData[6],
+                        "Payment made" + rowData[7]};
+                tempData.add(labelData);
+            }
+
+        }
+        scanner.close();
+        return tempData;
     }
 
 }

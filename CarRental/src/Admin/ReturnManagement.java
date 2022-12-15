@@ -31,7 +31,7 @@ public class ReturnManagement extends JFrame{
     File returnHistoryFile = new File("./CarRental/src/Data/Return History.txt");
     File paymentFile = new File("./CarRental/src/Data/Payment.txt");
     String[] carColumns = {"Car Registration No", "Make", "Model", "Available"};
-    String[] rentalColumns = {"Customer ID", "Car Registration No.", "Rental date", "Due Date", "Return Date" + "Return" + "Payment"};
+    String[] rentalColumns = {"Customer ID", "Car Registration No.", "Rental date", "Due Date", "Return Date", "Return", "Payment"};
 
     private static JTable createTable(ArrayList<Object[]> data, String[] columns){
         DefaultTableModel model = new DefaultTableModel(){
@@ -117,21 +117,13 @@ public class ReturnManagement extends JFrame{
                 returnDateField.setText(format.format(calendar.getTime()));
             }
             @Override
-            public void mousePressed(MouseEvent e) {
-
-            }
+            public void mousePressed(MouseEvent e) {}
             @Override
-            public void mouseReleased(MouseEvent e) {
-
-            }
+            public void mouseReleased(MouseEvent e) {}
             @Override
-            public void mouseEntered(MouseEvent e) {
-
-            }
+            public void mouseEntered(MouseEvent e) {}
             @Override
-            public void mouseExited(MouseEvent e) {
-
-            }
+            public void mouseExited(MouseEvent e) {}
         });
 
         infoPanel.add(new JSeparator(SwingConstants.HORIZONTAL));
@@ -231,7 +223,7 @@ public class ReturnManagement extends JFrame{
         while(scanner.hasNextLine()){
             String row = scanner.nextLine();
             if (file == bookingHistoryFile || file == returnHistoryFile){
-                String[] data = row.split(":", 7);
+                String[] data = row.split(":");
                 if (data.length > 1){
                     if (file == bookingHistoryFile){
                         Object[] da = {data[0], data[1], data[2], data[3], data[4], data[5], data[6]};
@@ -337,10 +329,6 @@ public class ReturnManagement extends JFrame{
             return 0;
         long diff = Math.abs(TimeUnit.DAYS.convert(diffInMil, TimeUnit.MILLISECONDS));
         return (int) diff;
-    }
-
-    public static void main(String[] args) throws ParseException {
-        new ReturnManagement().setVisible(true);
     }
 
 }

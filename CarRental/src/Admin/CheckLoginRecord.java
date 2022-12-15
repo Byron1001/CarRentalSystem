@@ -26,9 +26,15 @@ public class CheckLoginRecord extends JFrame {
         panel = new JPanel();
         panel.setLayout(new GridLayout(100, 1));
         for (Object[] data :loginData){
-            String row = "Date: " + data[0] + "\t\t" + "Login Time: " + data[1] + "\t\t" +
-                    "Username: " + data[2] + "\t\t" + "Character: " + data[3] + "\t\t";
-            panel.add(new JLabel(row));
+            String row1 = "Date: " + data[0];
+            String row2 = "Login Time: " + data[1];
+            String row3 = "Username: " + data[2];
+            String row4 = "Character: " + data[3];
+            panel.add(new JLabel(row1));
+            panel.add(new JLabel(row2));
+            panel.add(new JLabel(row3));
+            panel.add(new JLabel(row4));
+            panel.add(new JLabel());
         }
         panel.add(new JLabel("Login History print finished."), JScrollPane.CENTER_ALIGNMENT);
         panel.add(new JSeparator());

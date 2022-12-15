@@ -80,9 +80,19 @@ public class AdminMain extends JFrame {
                 dispose();
             }
         });
+        checkLoginRecordButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new CheckLoginRecord().setVisible(true);
+                dispose();
+            }
+        });
+        generateReportButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new GenerateReport();
+            }
+        });
     }
 
-    public static void main(String[] args){
-        new AdminMain().setVisible(true);
-    }
 }

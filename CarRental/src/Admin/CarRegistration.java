@@ -92,7 +92,7 @@ public class CarRegistration extends JFrame implements MouseListener {
                 carModelString = carModelField.getText();
                 carAvailableString = carAvailableBox.getSelectedItem().toString();
 
-                if (checkCarIDAvail(carRegNoString)){
+                if (!checkCarIDAvail(carRegNoString)){
                     JOptionPane.showMessageDialog(null, "Car Registration No already exists!", "Car Registration No error", JOptionPane.ERROR_MESSAGE);
                 }
                 else {

@@ -49,7 +49,8 @@ public class CustomerPayment extends JFrame{
                     JOptionPane.showMessageDialog(null, "Please select the payment you want to make", "Payment select error", JOptionPane.ERROR_MESSAGE);
                 }
                 else {
-                    Object[] paymentRow = paymentData.get(selectedIndex);
+                    int usernameIndex = getUsernameIndex(username, paymentTable.getModel().getValueAt(selectedIndex, 1).toString(), paymentTable.getModel().getValueAt(selectedIndex, 2).toString(), paymentData);
+                    Object[] paymentRow = paymentData.get(usernameIndex);
                     Integer pay = Integer.parseInt(paymentRow[5].toString()) + Integer.parseInt(paymentRow[6].toString());
                     double payFloat = Double.parseDouble(pay.toString());
                     String message = "Are you sure to make payment?\nYou will need to pay RM " + payFloat;
@@ -57,7 +58,7 @@ public class CustomerPayment extends JFrame{
                     int choose = JOptionPane.showConfirmDialog(null, message, "Payment confirmation", JOptionPane.YES_NO_OPTION);
                     if (choose == JOptionPane.YES_OPTION){
                         paymentRow[paymentRow.length - 1] = yes;
-                        paymentData.remove(selectedIndex);
+                        paymentData.remove(usernameIndex);
                         paymentData.add(paymentRow);
 
                         String carID = paymentRow[1].toString();
@@ -114,9 +115,11 @@ public class CustomerPayment extends JFrame{
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
-        String row = scanner1.nextLine();
-        String[] record = row.split("/");
-        username = record[2];
+        while (scanner1.hasNextLine()){
+            String row = scanner1.nextLine();
+            String[] record = row.split("/");
+            username = record[2];
+        }
         return username;
     }
 
@@ -187,12 +190,17 @@ public class CustomerPayment extends JFrame{
         for (Object[] dd : returnHistoryData){
             if(dd[0].toString().equals(username) && dd[1].toString().equals(carID) && dd[4].toString().equals(returnDate))
                 return returnHistoryData.indexOf(dd);
-            }
+        }
+
         return -1;
     }
-
-    public static void main(String[] args) {
-        new CustomerPayment().setVisible(true);
+    private int getUsernameIndex(String username, String carID, String returnDate, ArrayList<Object[]> paymentData){
+        for(Object[] data : paymentData){
+            if (data[0].toString().equals(username) && data[1].toString().equals(carID) && data[2].toString().equals(returnDate)){
+                return paymentData.indexOf(data);
+            }
+        }
+        return -1;
     }
 
 }

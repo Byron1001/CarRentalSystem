@@ -2,6 +2,7 @@ package Customer;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
 import javax.swing.text.MaskFormatter;
 import java.awt.*;
 import java.awt.event.*;
@@ -30,7 +31,7 @@ public class CarReturn extends JFrame{
     File paymentFile = new File("./CarRental/src/Data/Payment.txt");
     File loginHistoryFile = new File("./CarRental/src/Data/Login History.txt");
     String[] carColumns = {"Car Registration No", "Make", "Model", "Available"};
-    String[] rentalColumns = {"Customer ID", "Car Registration No.", "Rental date", "Due Date", "Return Date" + "Return" + "Payment"};
+    String[] rentalColumns = {"Car Registration No.", "Rental date", "Due Date", "Return Date"};
     String username;
 
     private static JTable createTable(ArrayList<Object[]> data, String[] columns){
@@ -48,6 +49,8 @@ public class CarReturn extends JFrame{
         for (int i = 0; i < data.size();i++) {
             model.addRow(data.get(i));
         }
+        TableColumnModel col = tempTable.getColumnModel();
+        col.removeColumn(col.getColumn(0));
         tempTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
         tempTable.getTableHeader().setFont(new Font("Times New Roman", Font.BOLD, 14));
         return tempTable;
@@ -134,11 +137,11 @@ public class CarReturn extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 int selectedIndex = rentTable.getSelectedRow();
-                Object[] rent = {carIDField.getText(), rentalDateField.getText(), dueDateField.getText(), returnDateField.getText(), "Yes", "No"};
+                String username = rentData.get(selectedIndex)[0].toString();
+                Object[] rent = {username, carIDField.getText(), rentalDateField.getText(), dueDateField.getText(), returnDateField.getText(), "Yes", "No"};
                 int carIndex = getCarIndex(carIDField.getText(), carData);
                 Object[] car = carData.get(carIndex);
                 car[3] = "Yes";
-                String username = rentData.get(selectedIndex)[0].toString();
                 carData.remove(carIndex);
                 carData.add(car);
 
@@ -230,7 +233,7 @@ public class CarReturn extends JFrame{
                         tempData.add(da);
                     }
                     if (file == returnHistoryFile){
-                        Object[] da = {data[0], data[1], data[2], data[3], data[4], data[5]};
+                        Object[] da = {data[0], data[1], data[2], data[3], data[4], data[5], data[6]};
                         tempData.add(da);
                     }
                 }
@@ -255,7 +258,7 @@ public class CarReturn extends JFrame{
                 if (file == bookingHistoryFile)
                     whole += ":" + ob[4] + ":" + ob[5] + ":" + ob[6];
                 if (file == returnHistoryFile)
-                    whole += ":" + ob[4] + ":" + ob[5];
+                    whole += ":" + ob[4] + ":" + ob[5] + ":" + ob[6];
                 whole += "\n";
                 if(ob.length == data.indexOf(ob) + 1){
                     whole += "\n";
@@ -285,7 +288,7 @@ public class CarReturn extends JFrame{
 
     private int getCarIndex(String carID, ArrayList<Object[]> carData){
         for (Object[] d : carData){
-            if (carID.equals(d[0]))
+            if (carID.equals(d[0].toString()))
                 return carData.indexOf(d);
         }
         return -1;
@@ -323,13 +326,12 @@ public class CarReturn extends JFrame{
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
-        String row = scanner1.nextLine();
-        String[] record = row.split("/");
-        username = record[2];
+        while (scanner1.hasNextLine()){
+            String row = scanner1.nextLine();
+            String[] record = row.split("/");
+            username = record[2];
+        }
         return username;
     }
 
-    public static void main(String[] args) throws ParseException {
-        new CarReturn().setVisible(true);
-    }
 }
