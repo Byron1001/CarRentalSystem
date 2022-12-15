@@ -114,8 +114,9 @@ public class CustomerVerify extends JFrame implements MouseListener {
                         data.add(new Customer(usernameString, passwordString, null));
                         tempData.remove(selectedIndex);
                         saveData(data, customerDataFile);
-                        saveData(tempData, customerDataFile);
-                        new CustomerRegistration().setVisible(true);
+                        saveData(tempData, customerDataFile, 1);
+                        new CustomerVerify().setVisible(true);
+                        JOptionPane.showMessageDialog(null, "Customer verified", "Verification success", JOptionPane.INFORMATION_MESSAGE);
                         dispose();
                     }
                     else {
@@ -128,32 +129,31 @@ public class CustomerVerify extends JFrame implements MouseListener {
             @Override
             public void actionPerformed(ActionEvent e) {
                 int selectedIndex = table1.getSelectedRow();
-
                 usernameString = usernameField.getText();
                 passwordString = passwordField.getText();
-                data.set(selectedIndex, new Customer(usernameString, passwordString, null));
+                tempData.set(selectedIndex, new Customer(usernameString, passwordString, "No"));
+                new CustomerVerify().setVisible(true);
                 saveData(data, customerDataFile);
-                saveData(tempData, tempCustomerDataFile);
+                saveData(tempData, tempCustomerDataFile, 1);
                 dispose();
-                new CustomerRegistration().setVisible(true);
             }
         });
         deleteButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 int selectedIndex = table1.getSelectedRow();
-                data.remove(selectedIndex);
+                tempData.remove(selectedIndex);
                 saveData(data, customerDataFile);
-                saveData(tempData, tempCustomerDataFile);
+                saveData(tempData, tempCustomerDataFile, 1);
                 dispose();
-                new CustomerRegistration().setVisible(true);
+                new CustomerVerify().setVisible(true);
             }
         });
         cancelButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 saveData(data, customerDataFile);
-                saveData(tempData, tempCustomerDataFile);
+                saveData(tempData, tempCustomerDataFile, 1);
                 dispose();
                 new AdminMain().setVisible(true);
             }
@@ -192,10 +192,10 @@ public class CustomerVerify extends JFrame implements MouseListener {
     public void mouseEntered(MouseEvent e) {}
     @Override
     public void mouseExited(MouseEvent e) {}
-    private ArrayList<Customer> getData(File customerDataFile){
+    private ArrayList<Customer> getData(File tempCustomerDataFile){
         ArrayList<Customer> tempData = new ArrayList<Customer>();
         try {
-            scanner = new Scanner(customerDataFile);
+            scanner = new Scanner(tempCustomerDataFile);
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -244,6 +244,24 @@ public class CustomerVerify extends JFrame implements MouseListener {
             int count = 1;
             for (Customer cust : data){
                 String row = cust.getUsername() + ":" + cust.getPassword() + "\n";
+                if (count == data.size())
+                    row += "\n";
+                writer.write(row);
+                count++;
+            }
+            writer.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    private void saveData(ArrayList<Customer> data, File file, int check){
+        try {
+            FileWriter writer = new FileWriter(file, false);
+            int count = 1;
+            for (Customer cust : data){
+                String row = cust.getUsername() + ":" + cust.getPassword() + ":" + cust.getApprove() +"\n";
                 if (count == data.size())
                     row += "\n";
                 writer.write(row);
