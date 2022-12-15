@@ -142,10 +142,11 @@ public class LatestNotification extends JFrame {
         }
         while (scanner.hasNextLine()){
             String row = scanner.nextLine();
-            String[] rowData = row.split(":");
-            if (rowData.length > 1 && rowData[0].toString().equals(username)){
+            String[] rowData = row.split("/");
+            if (rowData.length > 1 && rowData[rowData.length - 2].toString().equals(username)){
                 tempData.add(rowData);
             }
+            System.out.println(rowData[rowData.length - 2]);
         }
         return tempData;
     }

@@ -183,15 +183,10 @@ public class CustomerBookingHistory extends JFrame{
         }
         while (scanner.hasNextLine()){
             String row = scanner.nextLine();
-            String[] rowData = row.split(":");
-            if (username.equals(rowData[0]) && rowData.length > 1){
-                String[] labelData = {"Rented Car ID: " + rowData[1],
-                        "Return date: " + rowData[2],
-                        "Rental days: " + rowData[3],
-                        "Delay days: " + rowData[4],
-                        "Rental fees: " + rowData[5],
-                        "Return delay fine: " + rowData[6],
-                        "Payment made: " + rowData[7]};
+            String[] rowData = row.split("/");
+            if (username.equals(rowData[rowData.length - 2]) && rowData.length > 1){
+                String[] labelData = {"Login Date: " + rowData[0],
+                        "Login time: " + rowData[1]};
                 tempData.add(labelData);
             }
 
