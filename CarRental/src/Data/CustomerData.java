@@ -6,11 +6,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class CustomerData {
-    File customerDataFile = new File("./CarRental/src/Data/Customer Data.txt");
+    File tempCustomerDataFile = new File("./CarRental/src/Data/Temp Customer Data.txt");
     File adminDataFile = new File("./CarRental/src/Data/Admin Data.txt");
     public boolean register(String username, String password) {
         init();
-        if(!checkUsernameAvail(customerDataFile, username))
+        if(!checkUsernameAvail(tempCustomerDataFile, username))
             return false;
         if(!checkUsernameAvail(adminDataFile, username))
             return false;
@@ -29,11 +29,11 @@ public class CustomerData {
         PrintWriter printWriter = null;
         try
         {
-            user_input = new FileWriter(customerDataFile, true);
+            user_input = new FileWriter(tempCustomerDataFile, true);
             bufferedWriter = new BufferedWriter(user_input);
             printWriter = new PrintWriter(bufferedWriter);
 
-            printWriter.println(username + ":" + password);
+            printWriter.println(username + ":" + password + ":Not");
         }
         catch (IOException e) {
             e.printStackTrace();
@@ -75,7 +75,7 @@ public class CustomerData {
 
     private void init(){
         try{
-            customerDataFile.createNewFile();
+            tempCustomerDataFile.createNewFile();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

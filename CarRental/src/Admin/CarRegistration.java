@@ -2,9 +2,11 @@ package Admin;
 
 import javax.swing.*;
 import javax.swing.table.*;
+import javax.swing.text.MaskFormatter;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -56,7 +58,6 @@ public class CarRegistration extends JFrame implements MouseListener {
         carAvailableBox.addItem("No");
 
         setLayout(new GridLayout(2, 1));
-        setSize(900, 500);
 
         finalData = new ArrayList<>();
         try {
@@ -78,7 +79,9 @@ public class CarRegistration extends JFrame implements MouseListener {
         add(scrollPane);
         add(carRegPanel);
         setVisible(true);
+        setSize(new Dimension(900, 500));
         setLocationRelativeTo(null);
+        setTitle("Admin Car Registration");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         addButton.addActionListener(new ActionListener() {
@@ -130,9 +133,41 @@ public class CarRegistration extends JFrame implements MouseListener {
             }
         });
 
+        carMakeField.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                if (e.getKeyChar() == KeyEvent.VK_ENTER)
+                    carModelField.requestFocus();
+                else if (e.getKeyChar() > '9' || e.getKeyChar() < '0')
+                    e.consume();
+            }
+        });
+        carRegNoField.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                if (e.getKeyChar() == KeyEvent.VK_ENTER){
+                    carMakeField.requestFocus();
+                }
+            }
+        });
+        carModelField.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                if (e.getKeyChar() == KeyEvent.VK_ENTER){
+                    carAvailableBox.requestFocus();
+                }
+            }
+        });
     }
 
     private void createUIComponents() {
+        MaskFormatter formatter = null;
+        try {
+            formatter = new MaskFormatter("Car_##");
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+        carRegNoField = new JFormattedTextField(formatter);
     }
 
     @Override

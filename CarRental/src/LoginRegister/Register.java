@@ -45,7 +45,7 @@ public class Register extends JFrame{
                     CustomerData cust = new CustomerData();
                     boolean success = cust.register(username, password);
                     if (success){
-                        JOptionPane.showMessageDialog(null, "Registration success.\nPlease login with your username and password.");
+                        JOptionPane.showMessageDialog(null, "Registration success.\nAdmin will approve your registration in one day.\nPlease login with your username and password later.");
                         new Login().setVisible(true);
                         dispose();
                     }

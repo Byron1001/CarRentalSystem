@@ -68,15 +68,15 @@ public class CustomerPayment extends JFrame{
                         returnHistoryData.remove(returnHistoryIndex);
                         returnHistoryData.add(returnData);
 
+                        saveUserData(paymentData, paymentFile, false);
+                        saveUserData(returnHistoryData, returnHistoryFile, false);
+                        new CustomerPayment().setVisible(true);
+                        dispose();
                         JOptionPane.showMessageDialog(null, "Payment success", "Payment notice", JOptionPane.INFORMATION_MESSAGE);
                     }
                     else {
                         JOptionPane.showMessageDialog(null, "Payment cancelled", "Payment Cancelled", JOptionPane.INFORMATION_MESSAGE);
                     }
-                    saveUserData(paymentData, paymentFile, false);
-                    saveUserData(returnHistoryData, returnHistoryFile, false);
-                    new CustomerPayment().setVisible(true);
-                    dispose();
                 }
             }
         });
@@ -172,9 +172,6 @@ public class CustomerPayment extends JFrame{
                 whole += "\n";
                 if(ob.length == data.indexOf(ob) + 1)
                     whole += "\n";
-                if (file == returnHistoryFile)
-                    System.out.println(whole);
-                System.out.println("HELOA");
                 if (!append)
                     writer.write(whole);
                 else
@@ -188,14 +185,9 @@ public class CustomerPayment extends JFrame{
 
     private int getReturnHistoryIndex(ArrayList<Object[]> returnHistoryData, String username, String carID, String returnDate){
         for (Object[] dd : returnHistoryData){
-            if(dd[0].equals(username) && dd[1].equals(carID) && dd[4].equals(returnDate))
+            if(dd[0].toString().equals(username) && dd[1].toString().equals(carID) && dd[4].toString().equals(returnDate))
                 return returnHistoryData.indexOf(dd);
-            System.out.println(returnHistoryData.indexOf(dd));
-            System.out.println(username);
-            System.out.println(carID);
-            System.out.println(Arrays.toString(dd));
-            System.out.println(returnDate);
-        }
+            }
         return -1;
     }
 

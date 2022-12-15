@@ -13,12 +13,24 @@ import java.util.LinkedList;
 import javax.swing.JOptionPane;
 
 public class Customer {
-    public String username, password;
+    private String username, password;
+    private String approve;
 
-    public Customer(String username, String password)
+    public Customer(String username, String password, String approve)
     {
         this.username = username;
         this.password = password;
+        this.approve = approve;
+    }
+
+    public String getUsername(){
+        return username;
+    }
+    public String getPassword(){
+        return password;
+    }
+    public String getApprove(){
+        return approve;
     }
 
     public int data_validity(Customer customer) {
@@ -78,7 +90,7 @@ public class Customer {
         return false;
     }
 
-    private LinkedList<String> get_userinfo(String info)
+    public LinkedList<String> get_userinfo(String info)
     {
         LinkedList<String> username = new LinkedList<String>();
         FileReader file = null;

@@ -17,10 +17,10 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class CustomerRegistration extends JFrame implements MouseListener {
+public class CustomerVerify extends JFrame implements MouseListener {
     private JLabel usernameLabel, passwordLabel;
     private JTextField usernameField, passwordField;
-    private JButton addButton;
+    private JButton verifyButton;
     private JButton deleteButton;
     private JButton modifyButton;
     private JButton cancelButton;
@@ -29,9 +29,10 @@ public class CustomerRegistration extends JFrame implements MouseListener {
     private String usernameString, passwordString;
     private JTable table1;
     private Scanner scanner;
-    ArrayList<Customer> data;
-    private String[] columns = {"Username", "Password"};
+    ArrayList<Customer> data, tempData;
+    private String[] columns = {"Username", "Password", "Verified"};
     File customerDataFile = new File("./CarRental/src/Data/Customer Data.txt");
+    File tempCustomerDataFile = new File("./CarRental/src/Data/Temp Customer Data.txt");
 
     private JTable createTable(ArrayList<Customer> data){
         DefaultTableModel model = new DefaultTableModel(){
@@ -47,20 +48,21 @@ public class CustomerRegistration extends JFrame implements MouseListener {
         }
 
         for(int i = 0; i < data.size();i++){
-            model.addRow(new String[] {data.get(i).getUsername(), data.get(i).getPassword()});
+            model.addRow(new String[] {data.get(i).getUsername(), data.get(i).getPassword(), data.get(i).getApprove()});
         }
         temp_table.getTableHeader().setFont(new Font("Times New Roman", Font.BOLD, 14));
         return temp_table;
     }
 
-    public CustomerRegistration(){
+    public CustomerVerify(){
 
         init();
-        data = getData(customerDataFile);
+        data = getData(customerDataFile, 2);
+        tempData = getData(tempCustomerDataFile);
 
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(2, 1));
-        table1 = createTable(data);
+        table1 = createTable(tempData);
         table1.addMouseListener(this);
         scrollPane = new JScrollPane(table1);
         panel.add(scrollPane);
@@ -69,7 +71,7 @@ public class CustomerRegistration extends JFrame implements MouseListener {
         usernameField = new JTextField();
         passwordLabel = new JLabel("Password");
         passwordField = new JTextField();
-        addButton = new JButton("Add");
+        verifyButton = new JButton("Verify");
         modifyButton = new JButton("Modify");
         deleteButton = new JButton("Delete");
         cancelButton = new JButton("Cancel");
@@ -84,7 +86,7 @@ public class CustomerRegistration extends JFrame implements MouseListener {
         buttonPanel.add(passwordField);
         buttonPanel.add(new JSeparator());
         buttonPanel.add(new JSeparator());
-        buttonPanel.add(addButton);
+        buttonPanel.add(verifyButton);
         buttonPanel.add(modifyButton);
         buttonPanel.add(deleteButton);
         buttonPanel.add(cancelButton);
@@ -93,24 +95,32 @@ public class CustomerRegistration extends JFrame implements MouseListener {
         setContentPane(panel);
         setSize(900, 500);
         setLocationRelativeTo(null);
-        setTitle("Admin Customer Registration and Authorization Management");
+        setTitle("Admin Customer Registration Verification");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
 
-        addButton.addActionListener(new ActionListener() {
+        verifyButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                usernameString =  usernameField.getText();
-                passwordString = passwordField.getText();
-                boolean check = checkUserAvail(usernameString);
-                if (check){
-                    data.add(new Customer(usernameString, passwordString, null));
-                    dispose();
-                    saveData(data);
-                    new CustomerRegistration().setVisible(true);
+                int selectedIndex = table1.getSelectedRow();
+                if (selectedIndex == -1){
+                    JOptionPane.showMessageDialog(null, "Please select the user to be verified.", "Selection error", JOptionPane.ERROR_MESSAGE);
                 }
                 else {
-                    JOptionPane.showMessageDialog(null, "No repeated Username allowed!", "Username repeated", JOptionPane.ERROR_MESSAGE);
+                    usernameString =  usernameField.getText();
+                    passwordString = passwordField.getText();
+                    boolean check = checkUserAvail(usernameString);
+                    if (check){
+                        data.add(new Customer(usernameString, passwordString, null));
+                        tempData.remove(selectedIndex);
+                        saveData(data, customerDataFile);
+                        saveData(tempData, customerDataFile);
+                        new CustomerRegistration().setVisible(true);
+                        dispose();
+                    }
+                    else {
+                        JOptionPane.showMessageDialog(null, "No repeated Username allowed!", "Username repeated", JOptionPane.ERROR_MESSAGE);
+                    }
                 }
             }
         });
@@ -122,7 +132,8 @@ public class CustomerRegistration extends JFrame implements MouseListener {
                 usernameString = usernameField.getText();
                 passwordString = passwordField.getText();
                 data.set(selectedIndex, new Customer(usernameString, passwordString, null));
-                saveData(data);
+                saveData(data, customerDataFile);
+                saveData(tempData, tempCustomerDataFile);
                 dispose();
                 new CustomerRegistration().setVisible(true);
             }
@@ -132,7 +143,8 @@ public class CustomerRegistration extends JFrame implements MouseListener {
             public void actionPerformed(ActionEvent e) {
                 int selectedIndex = table1.getSelectedRow();
                 data.remove(selectedIndex);
-                saveData(data);
+                saveData(data, customerDataFile);
+                saveData(tempData, tempCustomerDataFile);
                 dispose();
                 new CustomerRegistration().setVisible(true);
             }
@@ -140,7 +152,8 @@ public class CustomerRegistration extends JFrame implements MouseListener {
         cancelButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                saveData(data);
+                saveData(data, customerDataFile);
+                saveData(tempData, tempCustomerDataFile);
                 dispose();
                 new AdminMain().setVisible(true);
             }
@@ -172,21 +185,13 @@ public class CustomerRegistration extends JFrame implements MouseListener {
         passwordField.setText(model.getValueAt(selectedIndex, 1).toString());
     }
     @Override
-    public void mousePressed(MouseEvent e) {
-
-    }
+    public void mousePressed(MouseEvent e) {}
     @Override
-    public void mouseReleased(MouseEvent e) {
-
-    }
+    public void mouseReleased(MouseEvent e) {}
     @Override
-    public void mouseEntered(MouseEvent e) {
-
-    }
+    public void mouseEntered(MouseEvent e) {}
     @Override
-    public void mouseExited(MouseEvent e) {
-
-    }
+    public void mouseExited(MouseEvent e) {}
     private ArrayList<Customer> getData(File customerDataFile){
         ArrayList<Customer> tempData = new ArrayList<Customer>();
         try {
@@ -198,24 +203,44 @@ public class CustomerRegistration extends JFrame implements MouseListener {
             String row = scanner.nextLine();
             String[] datarow = row.split(":");
             if (datarow.length != 1){
+                Customer cust = new Customer(datarow[0], datarow[1], datarow[2]);
+                tempData.add(cust);
+            }
+        }
+        scanner.close();
+        return tempData;
+    }
+
+    private ArrayList<Customer> getData(File customerDataFile, int num){
+        ArrayList<Customer> tempData = new ArrayList<Customer>();
+        try {
+            scanner = new Scanner(customerDataFile);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        while (scanner.hasNextLine()){
+            String row = scanner.nextLine();
+            String[] datarow = row.split(":");
+            if (datarow.length > 1){
                 Customer cust = new Customer(datarow[0], datarow[1], null);
                 tempData.add(cust);
             }
         }
         scanner.close();
-
         return tempData;
     }
+
     private void init(){
         try {
             customerDataFile.createNewFile();
+            tempCustomerDataFile.createNewFile();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
-    private void saveData(ArrayList<Customer> data){
+    private void saveData(ArrayList<Customer> data, File file){
         try {
-            FileWriter writer = new FileWriter(customerDataFile, false);
+            FileWriter writer = new FileWriter(file, false);
             int count = 1;
             for (Customer cust : data){
                 String row = cust.getUsername() + ":" + cust.getPassword() + "\n";
@@ -237,6 +262,10 @@ public class CustomerRegistration extends JFrame implements MouseListener {
             }
         }
         return true;
+    }
+
+    public static void main(String[] args){
+        new CustomerVerify().setVisible(true);
     }
 
 }

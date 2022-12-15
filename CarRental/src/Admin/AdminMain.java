@@ -1,5 +1,6 @@
 package Admin;
 
+import Customer.Customer;
 import LoginRegister.Login;
 
 import javax.swing.*;
@@ -16,6 +17,7 @@ public class AdminMain extends JFrame {
     private JButton logoutButton;
     private JPanel mainPanel;
     private JButton generateReportButton;
+    private JButton customerRegistrationManagementButton;
 
     public AdminMain(){
         carRegistrationButton.addActionListener(new ActionListener() {
@@ -70,6 +72,13 @@ public class AdminMain extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(900, 500);
         setLocationRelativeTo(null);
+        customerRegistrationManagementButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new CustomerVerify().setVisible(true);
+                dispose();
+            }
+        });
     }
 
     public static void main(String[] args){
