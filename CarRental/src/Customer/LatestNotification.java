@@ -38,6 +38,7 @@ public class LatestNotification extends JFrame {
             panel.add(new JLabel("Your new Booking details:\nCar ID: " + dd[1]));
             panel.add(new JLabel("Rental date: " + dd[2]));
             panel.add(new JLabel("Due date: " + dd[3]));
+            panel.add(new JLabel());
         }
         panel.add(new JLabel());
 
@@ -46,6 +47,7 @@ public class LatestNotification extends JFrame {
         for(Object[] dd : userLoginHistoryData){
             panel.add(new JLabel("You have new Login:\nLogin date: " + dd[0]));
             panel.add(new JLabel("Login time: " + dd[1]));
+            panel.add(new JLabel());
         }
         panel.add(new JLabel());
 
@@ -61,6 +63,7 @@ public class LatestNotification extends JFrame {
             Integer total = Integer.parseInt(dd[5].toString()) + Integer.parseInt(dd[6].toString());
             panel.add(new JLabel("Total payment needed to be made: RM " + total.toString()));
             panel.add(new JLabel("Payment finished: " + dd[7]));
+            panel.add(new JLabel());
         }
         panel.add(new JLabel());
 
@@ -73,7 +76,9 @@ public class LatestNotification extends JFrame {
             panel.add(new JLabel("Return date: " + dd[4]));
             panel.add(new JLabel("Return process finished: " + dd[5]));
             panel.add(new JLabel("Rental and delay payment made: " + dd[6]));
+            panel.add(new JLabel());
         }
+        panel.add(new JLabel("That's all your notification"));
         panel.add(new JLabel());
         backButton = new JButton("Back to main menu");
         panel.add(backButton);
@@ -98,13 +103,13 @@ public class LatestNotification extends JFrame {
 
     private String getUsername(File loginHistoryFile){
         String username = null;
-        Scanner scanner1 = null;
+        Scanner scanner1;
         try {
             scanner1 = new Scanner(loginHistoryFile);
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
-        while(scanner.hasNextLine()){
+        while(scanner1.hasNextLine()){
             String row = scanner1.nextLine();
             String[] record = row.split("/");
             username = record[2];
@@ -177,7 +182,5 @@ public class LatestNotification extends JFrame {
         }
         return tempData;
     }
-
-
 
 }

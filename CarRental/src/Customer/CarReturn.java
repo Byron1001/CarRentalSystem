@@ -320,7 +320,7 @@ public class CarReturn extends JFrame{
 
     private String getUsername(File loginHistoryFile){
         String username = null;
-        Scanner scanner1 = null;
+        Scanner scanner1;
         try {
             scanner1 = new Scanner(loginHistoryFile);
         } catch (FileNotFoundException e) {

@@ -194,7 +194,7 @@ public class CarBooking extends JFrame{
 
     public static String getUsername(File loginHistoryFile){
         String username = null;
-        Scanner scanner1 = null;
+        Scanner scanner1;
         try {
             scanner1 = new Scanner(loginHistoryFile);
         } catch (FileNotFoundException e) {

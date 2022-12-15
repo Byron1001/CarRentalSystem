@@ -20,7 +20,7 @@ public class CustomerBookingHistory extends JFrame{
     File bookingHistoryFile = new File("./CarRental/src/Data/Booking History.txt");
     private String getUsername(File loginHistoryFile){
         String username = null;
-        Scanner scanner1 = null;
+        Scanner scanner1;
         try {
             scanner1 = new Scanner(loginHistoryFile);
         } catch (FileNotFoundException e) {
