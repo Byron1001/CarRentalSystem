@@ -23,8 +23,8 @@ public class ReturnManagement extends JFrame{
     private JPanel infoPanel = new JPanel();
     private JLabel customerIDLabel;
     private JLabel carIDLabel;
-    private JTable availableTable, rentTable;
-    private JScrollPane availablePane, rentPane;
+    private JTable rentTable;
+    private JScrollPane rentPane;
     private Scanner scanner;
     File carDataFile = new File("./CarRental/src/Data/Car Data.txt");
     File bookingHistoryFile = new File("./CarRental/src/Data/Booking History.txt");
@@ -99,44 +99,10 @@ public class ReturnManagement extends JFrame{
         ArrayList<Object[]> rentData = getData(bookingHistoryFile);
         ArrayList<Object[]> returnData = getData(returnHistoryFile);
 
-        availableTable = createTable(carData, carColumns);
         rentTable = createTable(rentData, rentalColumns);
 
-        availablePane = new JScrollPane(availableTable);
         rentPane = new JScrollPane(rentTable);
 
-        availableTable.addMouseListener(new MouseListener() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                int selectedIndex = availableTable.getSelectedRow();
-                carIDField.setValue(availableTable.getValueAt(selectedIndex, 0));
-
-                SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
-                Calendar calendar = Calendar.getInstance();
-                rentalDateField.setText(format.format(calendar.getTime()));
-
-                calendar.add(Calendar.DATE, 1);
-                dueDateField.setText(format.format(calendar.getTime()));
-
-                customerIDField.setText(null);
-            }
-            @Override
-            public void mousePressed(MouseEvent e) {
-
-            }
-            @Override
-            public void mouseReleased(MouseEvent e) {
-
-            }
-            @Override
-            public void mouseEntered(MouseEvent e) {
-
-            }
-            @Override
-            public void mouseExited(MouseEvent e) {
-
-            }
-        });
         rentTable.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -199,8 +165,8 @@ public class ReturnManagement extends JFrame{
                                 "Rental date: " + rentalDateField.getText() + "\n" +
                                 "Return date: " + returnDateField.getText() + "\n" +
                                 "Due date: " + dueDateField.getText() + "\n" +
-                                "Your rental payment:" + payment[4] + "\n" +
-                                "Your fine payment:" + payment[5] + "\n";
+                                "Your rental payment:" + payment[5] + "\n" +
+                                "Your fine payment:" + payment[6] + "\n";
                         addPayment(payment);
                         JOptionPane.showMessageDialog(null, message, "Rental summary", JOptionPane.INFORMATION_MESSAGE);
                     } catch (ParseException ex) {
@@ -236,12 +202,12 @@ public class ReturnManagement extends JFrame{
             }
         });
 
-        add(availablePane);
         add(rentPane);
         add(infoPanel);
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(new Dimension(900, 500));
+        setTitle("Admin Car Return Management");
         setLocationRelativeTo(null);
     }
 

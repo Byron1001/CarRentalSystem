@@ -21,7 +21,7 @@ public class CarReturn extends JFrame{
     private JPanel buttonPanel = new JPanel();
     private JPanel infoPanel = new JPanel();
     private JLabel carIDLabel;
-    private JTable availableTable, rentTable;
+    private JTable rentTable;
     private JScrollPane rentPane;
     private Scanner scanner;
     File carDataFile = new File("./CarRental/src/Data/Car Data.txt");
@@ -141,12 +141,12 @@ public class CarReturn extends JFrame{
                 String username = rentData.get(selectedIndex)[0].toString();
                 carData.remove(carIndex);
                 carData.add(car);
+
                 rentData.remove(selectedIndex);
                 returnData.add(rent);
                 saveData(rentData, bookingHistoryFile);
                 saveData(carData, carDataFile);
                 saveData(returnData, returnHistoryFile);
-                System.out.println(rentData);
                 try {
                     int delay = fineDateCount(returnDateField.getText(), dueDateField.getText());
                     int rentDay = rentalDateCount(rentalDateField.getText(), returnDateField.getText());
@@ -197,6 +197,7 @@ public class CarReturn extends JFrame{
         setContentPane(panel);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(new Dimension(900, 500));
+        setTitle("Customer Car return");
         setLocationRelativeTo(null);
         setVisible(true);
     }

@@ -3,6 +3,7 @@ package Admin;
 import Customer.Customer;
 import Data.CustomerData;
 
+import javax.print.attribute.standard.JobKOctetsProcessed;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -114,7 +115,7 @@ public class CustomerVerify extends JFrame implements MouseListener {
                         data.add(new Customer(usernameString, passwordString, null));
                         tempData.remove(selectedIndex);
                         saveData(data, customerDataFile);
-                        saveData(tempData, customerDataFile, 1);
+                        saveData(tempData, tempCustomerDataFile, 1);
                         new CustomerVerify().setVisible(true);
                         JOptionPane.showMessageDialog(null, "Customer verified", "Verification success", JOptionPane.INFORMATION_MESSAGE);
                         dispose();
@@ -133,6 +134,7 @@ public class CustomerVerify extends JFrame implements MouseListener {
                 passwordString = passwordField.getText();
                 tempData.set(selectedIndex, new Customer(usernameString, passwordString, "No"));
                 new CustomerVerify().setVisible(true);
+                JOptionPane.showMessageDialog(null, "Customer registration information modified", "Customer registration information modification", JOptionPane.INFORMATION_MESSAGE);
                 saveData(data, customerDataFile);
                 saveData(tempData, tempCustomerDataFile, 1);
                 dispose();
@@ -143,10 +145,11 @@ public class CustomerVerify extends JFrame implements MouseListener {
             public void actionPerformed(ActionEvent e) {
                 int selectedIndex = table1.getSelectedRow();
                 tempData.remove(selectedIndex);
+                new CustomerVerify().setVisible(true);
+                JOptionPane.showMessageDialog(null, "Customer registration record deleted.", "Customer registration record delete", JOptionPane.INFORMATION_MESSAGE);
                 saveData(data, customerDataFile);
                 saveData(tempData, tempCustomerDataFile, 1);
                 dispose();
-                new CustomerVerify().setVisible(true);
             }
         });
         cancelButton.addActionListener(new ActionListener() {
@@ -154,8 +157,8 @@ public class CustomerVerify extends JFrame implements MouseListener {
             public void actionPerformed(ActionEvent e) {
                 saveData(data, customerDataFile);
                 saveData(tempData, tempCustomerDataFile, 1);
-                dispose();
                 new AdminMain().setVisible(true);
+                dispose();
             }
         });
         usernameField.addKeyListener(new KeyAdapter() {

@@ -1,6 +1,5 @@
 package Admin;
 
-import Customer.Customer;
 import LoginRegister.Login;
 
 import javax.swing.*;
@@ -18,6 +17,7 @@ public class AdminMain extends JFrame {
     private JPanel mainPanel;
     private JButton generateReportButton;
     private JButton customerRegistrationManagementButton;
+    private JButton checkLoginRecordButton;
 
     public AdminMain(){
         carRegistrationButton.addActionListener(new ActionListener() {
@@ -43,7 +43,7 @@ public class AdminMain extends JFrame {
                 } catch (ParseException ex) {
                     throw new RuntimeException(ex);
                 }
-                hide();
+                dispose();
                 reg.setVisible(true);
             }
         });
@@ -55,7 +55,7 @@ public class AdminMain extends JFrame {
                 } catch (ParseException ex) {
                     throw new RuntimeException(ex);
                 }
-                hide();
+                dispose();
             }
         });
         logoutButton.addActionListener(new ActionListener() {
@@ -70,6 +70,7 @@ public class AdminMain extends JFrame {
         JScrollPane pane = new JScrollPane(mainPanel);
         setContentPane(pane);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setTitle("Admin Main Menu");
         setSize(900, 500);
         setLocationRelativeTo(null);
         customerRegistrationManagementButton.addActionListener(new ActionListener() {

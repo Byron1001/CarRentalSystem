@@ -92,11 +92,16 @@ public class CarRegistration extends JFrame implements MouseListener {
                 carModelString = carModelField.getText();
                 carAvailableString = carAvailableBox.getSelectedItem().toString();
 
-                Object[] row = {carRegNoString, carMakeInteger, carModelString, carAvailableString};
-                finalData.add(row);
-                saveCarData(finalData);
-                dispose();
-                new CarRegistration().setVisible(true);
+                if (checkCarIDAvail(carRegNoString)){
+                    JOptionPane.showMessageDialog(null, "Car Registration No already exists!", "Car Registration No error", JOptionPane.ERROR_MESSAGE);
+                }
+                else {
+                    Object[] row = {carRegNoString, carMakeInteger, carModelString, carAvailableString};
+                    finalData.add(row);
+                    saveCarData(finalData);
+                    new CarRegistration().setVisible(true);
+                    dispose();
+                }
             }
         });
         modifyButton.addActionListener(new ActionListener() {
@@ -108,11 +113,16 @@ public class CarRegistration extends JFrame implements MouseListener {
                 carMakeInteger = Integer.parseInt(carMakeField.getText());
                 carModelString = carModelField.getText();
                 carAvailableString = carAvailableBox.getSelectedItem().toString();
-                Object[] row = {carRegNoString, carMakeInteger, carModelString, carAvailableString};
-                finalData.set(selectedIndex, row);
-                saveCarData(finalData);
-                dispose();
-                new CarRegistration().setVisible(true);
+                if (checkCarIDAvail(carRegNoString)){
+                    JOptionPane.showMessageDialog(null, "Car Registration No already exist!", "Car registration No error", JOptionPane.ERROR_MESSAGE);
+                }
+                else {
+                    Object[] row = {carRegNoString, carMakeInteger, carModelString, carAvailableString};
+                    finalData.set(selectedIndex, row);
+                    saveCarData(finalData);
+                    new CarRegistration().setVisible(true);
+                    dispose();
+                }
             }
         });
         deleteButton.addActionListener(new ActionListener() {
@@ -236,4 +246,11 @@ public class CarRegistration extends JFrame implements MouseListener {
         }
     }
 
+    private boolean checkCarIDAvail(String carID){
+        for (Object[] data : finalData){
+            if(data[0].toString().equals(carID))
+                return false;
+        }
+        return true;
+    }
 }

@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
+import java.util.concurrent.ForkJoinPool;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -105,9 +106,10 @@ public class CustomerRegistration extends JFrame implements MouseListener {
                 boolean check = checkUserAvail(usernameString);
                 if (check){
                     data.add(new Customer(usernameString, passwordString, null));
-                    dispose();
                     saveData(data);
                     new CustomerRegistration().setVisible(true);
+                    JOptionPane.showMessageDialog(null, "Customer Adding success", "Customer Adding", JOptionPane.INFORMATION_MESSAGE);
+                    dispose();
                 }
                 else {
                     JOptionPane.showMessageDialog(null, "No repeated Username allowed!", "Username repeated", JOptionPane.ERROR_MESSAGE);
@@ -123,8 +125,9 @@ public class CustomerRegistration extends JFrame implements MouseListener {
                 passwordString = passwordField.getText();
                 data.set(selectedIndex, new Customer(usernameString, passwordString, null));
                 saveData(data);
-                dispose();
                 new CustomerRegistration().setVisible(true);
+                JOptionPane.showMessageDialog(null, "Customer Information modified.", "Customer information modification", JOptionPane.INFORMATION_MESSAGE);
+                dispose();
             }
         });
         deleteButton.addActionListener(new ActionListener() {
@@ -133,16 +136,17 @@ public class CustomerRegistration extends JFrame implements MouseListener {
                 int selectedIndex = table1.getSelectedRow();
                 data.remove(selectedIndex);
                 saveData(data);
-                dispose();
                 new CustomerRegistration().setVisible(true);
+                JOptionPane.showMessageDialog(null, "Customer Deleted", "Customer Delete", JOptionPane.INFORMATION_MESSAGE);
+                dispose();
             }
         });
         cancelButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 saveData(data);
-                dispose();
                 new AdminMain().setVisible(true);
+                dispose();
             }
         });
         usernameField.addKeyListener(new KeyAdapter() {

@@ -186,12 +186,14 @@ public class RentalManagement extends JFrame{
                         rentData.remove(selectedIndex);
                         rentData.add(data);
                         saveData(rentData, bookingHistoryFile);
+
                         RentalManagement reg = null;
                         try {
                             new RentalManagement().setVisible(true);
                         } catch (ParseException ex) {
                             throw new RuntimeException(ex);
                         }
+                        JOptionPane.showMessageDialog(null, "Rental information modified.", "Rental information modification", JOptionPane.INFORMATION_MESSAGE);
                         dispose();
                     }
                     else {
@@ -209,6 +211,9 @@ public class RentalManagement extends JFrame{
                 int selectedIndex = availableTable.getSelectedRow();
                 if (selectedIndex == -1){
                     JOptionPane.showMessageDialog(null, "Please choose the rental record!", "error", JOptionPane.ERROR_MESSAGE);
+                }
+                else if(carData.get(selectedIndex)[3] == "No"){
+                    JOptionPane.showMessageDialog(null, "Please choose the available car!", "Car choosing error", JOptionPane.ERROR_MESSAGE);
                 }
                 else{
                     Object[] rent = {customerIDField.getText(), carIDField.getText(), rentalDateField.getText(), dueDateField.getText(), "00-00-0000", "No", "No"};
@@ -228,6 +233,7 @@ public class RentalManagement extends JFrame{
                             throw new RuntimeException(ex);
                         }
                         rental.setVisible(true);
+                        JOptionPane.showMessageDialog(null, "Car rental success.\nPlease ask customer to make payment before getting the car.", "Car rental successful", JOptionPane.INFORMATION_MESSAGE);
                         dispose();
                     }
                     else {
@@ -258,6 +264,7 @@ public class RentalManagement extends JFrame{
                     saveData(carData, carDataFile);
                     try {
                         new RentalManagement().setVisible(true);
+                        JOptionPane.showMessageDialog(null, "Rental record deleted", "Rental record delete", JOptionPane.INFORMATION_MESSAGE);
                         dispose();
                     } catch (ParseException ex) {
                         throw new RuntimeException(ex);
@@ -287,6 +294,7 @@ public class RentalManagement extends JFrame{
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(new Dimension(900, 500));
+        setTitle("Admin Rental Management");
         setLocationRelativeTo(null);
     }
 

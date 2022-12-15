@@ -6,12 +6,12 @@ import javax.swing.text.MaskFormatter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.*;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Formatter;
-import java.util.Scanner;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 public class CarBooking extends JFrame{
     private JTable table1;
@@ -70,6 +70,7 @@ public class CarBooking extends JFrame{
         fromLabel = new JLabel("From");
         toLabel = new JLabel("To");
 
+        titleLabel.setFont(new Font("Serif", Font.BOLD, 24));
         formatter = new MaskFormatter("##-##-####");
         formatter1 = new MaskFormatter("##-##-####");
         fromField = new JFormattedTextField(formatter);
@@ -94,6 +95,26 @@ public class CarBooking extends JFrame{
         buttonPanel.add(new JSeparator());
 
         carTablePanel = new JScrollPane(table1);
+        table1.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+                Calendar calendar = Calendar.getInstance();
+                fromField.setText(format.format(calendar.getTime()));
+
+                calendar.add(Calendar.DATE, 1);
+                toField.setText(format.format(calendar.getTime()));
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {}
+            @Override
+            public void mouseReleased(MouseEvent e) {}
+            @Override
+            public void mouseEntered(MouseEvent e) {}
+            @Override
+            public void mouseExited(MouseEvent e) {}
+        });
 
         carBookingPanel = new JPanel();
         carBookingPanel.setLayout(new GridLayout(1, 2, 30, 10));
@@ -106,6 +127,9 @@ public class CarBooking extends JFrame{
                 int selectedIndex = table1.getSelectedRow();
                 if (selectedIndex == -1){
                     JOptionPane.showMessageDialog(null, "Please choose the car.", "Car choosing", JOptionPane.ERROR_MESSAGE);
+                }
+                else if (data.get(selectedIndex)[3].equals("No")){
+                    JOptionPane.showMessageDialog(null, "Please select the available car!", "Car selection error", JOptionPane.ERROR_MESSAGE);
                 }
                 else {
                     Object[] change = data.get(selectedIndex);
@@ -138,6 +162,7 @@ public class CarBooking extends JFrame{
         setContentPane(carBookingPanel);
         setSize(new Dimension(900, 500));
         setLocationRelativeTo(null);
+        setTitle("Customer Car Booking");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
     }
@@ -185,7 +210,7 @@ public class CarBooking extends JFrame{
         return username;
     }
 
-    private void saveBookingHistory(String prefix){
+    private void saveBookingHistory(String prefix) {
         String suffix = ":00-00-0000:No:No\n";
         String row = prefix + suffix;
         try {
