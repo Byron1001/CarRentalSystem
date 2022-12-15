@@ -44,7 +44,10 @@ public class GenerateReport{
         int count = 0;
         while(scanner.hasNextLine()){
             String row = scanner.nextLine();
-            count++;
+            String[] rowData = row.split(":");
+            if (rowData.length > 1) {
+                count++;
+            }
         }
         return count;
     }
@@ -58,7 +61,10 @@ public class GenerateReport{
         int count = 0;
         while(scanner.hasNextLine()){
             String row = scanner.nextLine();
-            count++;
+            String[] rowData = row.split(":");
+            if (rowData.length > 1) {
+                count++;
+            }
         }
         return count;
     }
@@ -73,8 +79,10 @@ public class GenerateReport{
         while(scanner.hasNextLine()){
             String row = scanner.nextLine();
             String[] data = row.split(":");
-            if (data[data.length - 1].toString().equals("No")){
-                count++;
+            if (data.length > 1){
+                if (data[data.length - 1].toString().equals("No")){
+                    count++;
+                }
             }
         }
         return count;
@@ -90,8 +98,10 @@ public class GenerateReport{
         while(scanner.hasNextLine()){
             String row = scanner.nextLine();
             String[] data = row.split(":");
-            if (data[data.length - 1].toString().equals("Yes")){
-                count++;
+            if (data.length > 1){
+                if (data[data.length - 1].toString().equals("Yes")) {
+                    count++;
+                }
             }
         }
         return count;
@@ -106,7 +116,9 @@ public class GenerateReport{
         int count = 0;
         while(scanner.hasNextLine()){
             String row = scanner.nextLine();
-            count++;
+            String[] rowData = row.split(":");
+            if (rowData.length > 1)
+                count++;
         }
         return count;
     }
@@ -120,7 +132,9 @@ public class GenerateReport{
         int count = 0;
         while(scanner.hasNextLine()){
             String row = scanner.nextLine();
-            count++;
+            String[] rowData = row.split(":");
+            if (rowData.length > 1)
+                count++;
         }
         return count;
     }
@@ -134,7 +148,9 @@ public class GenerateReport{
         int count = 0;
         while(scanner.hasNextLine()){
             String row = scanner.nextLine();
-            count++;
+            String[] rowData = row.split(":");
+            if (rowData.length > 1)
+                count++;
         }
         return count;
     }
@@ -148,7 +164,9 @@ public class GenerateReport{
         int count = 0;
         while(scanner.hasNextLine()){
             String row = scanner.nextLine();
-            count++;
+            String[] rowData = row.split(":");
+            if (rowData.length > 1)
+                count++;
         }
         return count;
     }

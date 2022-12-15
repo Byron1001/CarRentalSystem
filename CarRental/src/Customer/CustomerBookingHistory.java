@@ -41,21 +41,23 @@ public class CustomerBookingHistory extends JFrame{
         loginHistoryData = getLoginHistory(username);
 
         JPanel mainPanel = new JPanel();
-        mainPanel.setLayout(new GridLayout(100, 1));
+        mainPanel.setLayout(new GridLayout(500, 1));
 
         mainPanel.add(new JLabel());
         mainPanel.add(new JLabel("Car Booking History"));
+        mainPanel.add(new JLabel());
         for(String[] data : bookingHistoryData){
-            for (int i = 1; i < data.length;i++){
+            for (int i = 0; i < data.length;i++){
                 mainPanel.add(new JLabel(data[i]));
             }
             mainPanel.add(new JLabel());
         }
         mainPanel.add(new JLabel());
         mainPanel.add(new JLabel("Car Return History"));
+        mainPanel.add(new JLabel());
 
         for(String[] data : returnHistoryData){
-            for (int i = 1; i < data.length;i++){
+            for (int i = 0; i < data.length;i++){
                 mainPanel.add(new JLabel(data[i]));
             }
             mainPanel.add(new JLabel());
@@ -63,8 +65,9 @@ public class CustomerBookingHistory extends JFrame{
 
         mainPanel.add(new JLabel());
         mainPanel.add(new JLabel("Payment made History"));
+        mainPanel.add(new JLabel());
         for(String[] data : paymentHistoryData){
-            for (int i = 1; i < data.length;i++){
+            for (int i = 0; i < data.length;i++){
                 mainPanel.add(new JLabel(data[i]));
             }
             mainPanel.add(new JLabel());
@@ -72,8 +75,9 @@ public class CustomerBookingHistory extends JFrame{
 
         mainPanel.add(new JLabel());
         mainPanel.add(new JLabel("Login History"));
-        for(String[] data : paymentHistoryData){
-            for (int i = 1; i < data.length;i++){
+        mainPanel.add(new JLabel());
+        for(String[] data : loginHistoryData){
+            for (int i = 0; i < data.length;i++){
                 mainPanel.add(new JLabel(data[i]));
             }
             mainPanel.add(new JLabel());
@@ -91,6 +95,7 @@ public class CustomerBookingHistory extends JFrame{
         });
         JScrollPane scrollPane = new JScrollPane(mainPanel);
         setContentPane(scrollPane);
+        setTitle("Booking History");
         setSize(new Dimension(900, 500));
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -186,7 +191,7 @@ public class CustomerBookingHistory extends JFrame{
                         "Delay days: " + rowData[4],
                         "Rental fees: " + rowData[5],
                         "Return delay fine: " + rowData[6],
-                        "Payment made" + rowData[7]};
+                        "Payment made: " + rowData[7]};
                 tempData.add(labelData);
             }
 

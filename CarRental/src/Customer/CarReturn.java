@@ -31,7 +31,7 @@ public class CarReturn extends JFrame{
     File paymentFile = new File("./CarRental/src/Data/Payment.txt");
     File loginHistoryFile = new File("./CarRental/src/Data/Login History.txt");
     String[] carColumns = {"Car Registration No", "Make", "Model", "Available"};
-    String[] rentalColumns = {"Car Registration No.", "Rental date", "Due Date", "Return Date"};
+    String[] rentalColumns = {"Customer ID", "Car Registration No.", "Rental date", "Due Date", "Return Date"};
     String username;
 
     private static JTable createTable(ArrayList<Object[]> data, String[] columns){
@@ -102,9 +102,9 @@ public class CarReturn extends JFrame{
             @Override
             public void mouseClicked(MouseEvent e) {
                 int selectedIndex = rentTable.getSelectedRow();
-                carIDField.setText(rentTable.getValueAt(selectedIndex, 1).toString());
-                rentalDateField.setText(rentTable.getValueAt(selectedIndex, 2).toString());
-                dueDateField.setText(rentTable.getValueAt(selectedIndex, 3).toString());
+                carIDField.setText(rentTable.getValueAt(selectedIndex, 0).toString());
+                rentalDateField.setText(rentTable.getValueAt(selectedIndex, 1).toString());
+                dueDateField.setText(rentTable.getValueAt(selectedIndex, 2).toString());
 
                 SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
                 Calendar calendar = Calendar.getInstance();
