@@ -7,7 +7,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Scanner;
 
 public class CustomerPayment extends JFrame{
@@ -27,9 +26,9 @@ public class CustomerPayment extends JFrame{
         username = getUsername(loginHistoryFile);
         yes = "Yes";
 
-        paymentData = getData(paymentFile, username);
+        paymentData = getData(paymentFile);
         paymentTable = createTable(paymentData, paymentColumns, username);
-        returnHistoryData = getData(returnHistoryFile, username);
+        returnHistoryData = getData(returnHistoryFile);
 
         paymentButton = new JButton("Make Payment");
         backButton = new JButton("Back to Main menu");
@@ -51,8 +50,8 @@ public class CustomerPayment extends JFrame{
                 else {
                     int usernameIndex = getUsernameIndex(username, paymentTable.getModel().getValueAt(selectedIndex, 1).toString(), paymentTable.getModel().getValueAt(selectedIndex, 2).toString(), paymentData);
                     Object[] paymentRow = paymentData.get(usernameIndex);
-                    Integer pay = Integer.parseInt(paymentRow[5].toString()) + Integer.parseInt(paymentRow[6].toString());
-                    double payFloat = Double.parseDouble(pay.toString());
+                    int pay = Integer.parseInt(paymentRow[5].toString()) + Integer.parseInt(paymentRow[6].toString());
+                    double payFloat = Double.parseDouble(Integer.toString(pay));
                     String message = "Are you sure to make payment?\nYou will need to pay RM " + payFloat;
 
                     int choose = JOptionPane.showConfirmDialog(null, message, "Payment confirmation", JOptionPane.YES_NO_OPTION);
@@ -132,8 +131,8 @@ public class CustomerPayment extends JFrame{
         };
         JTable tempTable = new JTable(model);
 
-        for (int i = 0; i < columns.length;i++){
-            model.addColumn(columns[i]);
+        for (String column : columns) {
+            model.addColumn(column);
         }
         for (Object[] i : data) {
             if (i[0].equals(username))
@@ -144,7 +143,7 @@ public class CustomerPayment extends JFrame{
         return tempTable;
     }
 
-    private ArrayList<Object[]> getData(File file, String username){
+    private ArrayList<Object[]> getData(File file){
         ArrayList<Object[]> tempDataUser = new ArrayList<>();
         try {
             scanner = new Scanner(file);

@@ -80,7 +80,7 @@ public class GenerateReport{
             String row = scanner.nextLine();
             String[] data = row.split(":");
             if (data.length > 1){
-                if (data[data.length - 1].toString().equals("No")){
+                if (data[data.length - 1].equals("No")){
                     count++;
                 }
             }
@@ -99,7 +99,7 @@ public class GenerateReport{
             String row = scanner.nextLine();
             String[] data = row.split(":");
             if (data.length > 1){
-                if (data[data.length - 1].toString().equals("Yes")) {
+                if (data[data.length - 1].equals("Yes")) {
                     count++;
                 }
             }

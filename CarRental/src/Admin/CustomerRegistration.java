@@ -1,7 +1,6 @@
 package Admin;
 
 import Customer.Customer;
-import Data.CustomerData;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -12,9 +11,7 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Scanner;
-import java.util.concurrent.ForkJoinPool;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -47,8 +44,8 @@ public class CustomerRegistration extends JFrame implements MouseListener {
             model.addColumn(col);
         }
 
-        for(int i = 0; i < data.size();i++){
-            model.addRow(new String[] {data.get(i).getUsername(), data.get(i).getPassword()});
+        for (Customer datum : data) {
+            model.addRow(new String[]{datum.getUsername(), datum.getPassword()});
         }
         temp_table.getTableHeader().setFont(new Font("Times New Roman", Font.BOLD, 14));
         return temp_table;
@@ -152,9 +149,9 @@ public class CustomerRegistration extends JFrame implements MouseListener {
         usernameField.addKeyListener(new KeyAdapter() {
             @Override
             public void keyTyped(KeyEvent e) {
-                Character c  = e.getKeyChar();
+                char c  = e.getKeyChar();
                 Pattern punct = Pattern.compile("\\p{Punct}");
-                Matcher m = punct.matcher(c.toString());
+                Matcher m = punct.matcher(Character.toString(c));
                 if (m.find()){
                     JOptionPane.showMessageDialog(null, "Please enter valid character!");
                     e.consume();
@@ -167,8 +164,8 @@ public class CustomerRegistration extends JFrame implements MouseListener {
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        int selectedIndex = 0;
-        DefaultTableModel model = new DefaultTableModel();
+        int selectedIndex;
+        DefaultTableModel model;
         model = (DefaultTableModel) table1.getModel();
         selectedIndex = table1.getSelectedRow();
 
@@ -192,7 +189,7 @@ public class CustomerRegistration extends JFrame implements MouseListener {
 
     }
     private ArrayList<Customer> getData(File customerDataFile){
-        ArrayList<Customer> tempData = new ArrayList<Customer>();
+        ArrayList<Customer> tempData = new ArrayList<>();
         try {
             scanner = new Scanner(customerDataFile);
         } catch (FileNotFoundException e) {

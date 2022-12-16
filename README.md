@@ -1,3 +1,3 @@
 # Car Rental System
 
-Car Rental System works with Wai Jie and wenshen
+Car Rental System works with Ng Wai Jie and Tan Wen Shen

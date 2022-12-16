@@ -171,7 +171,7 @@ public class CarRegistration extends JFrame implements MouseListener {
     }
 
     private void createUIComponents() {
-        MaskFormatter formatter = null;
+        MaskFormatter formatter;
         try {
             formatter = new MaskFormatter("Car_##");
         } catch (ParseException e) {

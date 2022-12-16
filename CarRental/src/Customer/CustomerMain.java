@@ -6,7 +6,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.FileNotFoundException;
 import java.text.ParseException;
 
 public class CustomerMain extends JFrame{
@@ -16,12 +15,12 @@ public class CustomerMain extends JFrame{
     private JLabel advertisementLabel2;
     private JButton latestNotificationButton;
     private JLabel welcomeBackLabel;
-    private JPanel notificationPanel;
     private JButton bookYourCarButton;
     private JButton makePaymentButton;
     private JButton bookingHistoryButton;
     private JButton returnTheCarButton;
     private JButton logoutButton;
+    private JPanel notificationPanel;
     private JPanel buttonPanel;
     private JPanel customerMainPanel;
 

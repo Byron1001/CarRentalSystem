@@ -60,8 +60,8 @@ public class LatestNotification extends JFrame {
             panel.add(new JLabel("Return delay: " + dd[4] + "days"));
             panel.add(new JLabel("Rental payment: RM " + dd[5]));
             panel.add(new JLabel("Return delay payment: RM " + dd[6]));
-            Integer total = Integer.parseInt(dd[5].toString()) + Integer.parseInt(dd[6].toString());
-            panel.add(new JLabel("Total payment needed to be made: RM " + total.toString()));
+            int total = Integer.parseInt(dd[5].toString()) + Integer.parseInt(dd[6].toString());
+            panel.add(new JLabel("Total payment needed to be made: RM " + total));
             panel.add(new JLabel("Payment finished: " + dd[7]));
             panel.add(new JLabel());
         }
@@ -127,7 +127,7 @@ public class LatestNotification extends JFrame {
         while (scanner.hasNextLine()){
             String row = scanner.nextLine();
             String[] rowData = row.split(":");
-            if (rowData.length > 1 && rowData[0].toString().equals(username)){
+            if (rowData.length > 1 && rowData[0].equals(username)){
                 tempData.add(rowData);
             }
         }
@@ -143,7 +143,7 @@ public class LatestNotification extends JFrame {
         while (scanner.hasNextLine()){
             String row = scanner.nextLine();
             String[] rowData = row.split("/");
-            if (rowData.length > 1 && rowData[rowData.length - 2].toString().equals(username)){
+            if (rowData.length > 1 && rowData[rowData.length - 2].equals(username)){
                 tempData.add(rowData);
             }
             System.out.println(rowData[rowData.length - 2]);
@@ -160,7 +160,7 @@ public class LatestNotification extends JFrame {
         while (scanner.hasNextLine()){
             String row = scanner.nextLine();
             String[] rowData = row.split(":");
-            if (rowData.length > 1 && rowData[0].toString().equals(username)){
+            if (rowData.length > 1 && rowData[0].equals(username)){
                 tempData.add(rowData);
             }
         }
@@ -177,7 +177,7 @@ public class LatestNotification extends JFrame {
         while (scanner.hasNextLine()){
             String row = scanner.nextLine();
             String[] rowData = row.split(":");
-            if (rowData.length > 1 && rowData[0].toString().equals(username)){
+            if (rowData.length > 1 && rowData[0].equals(username)){
                 tempData.add(rowData);
             }
         }

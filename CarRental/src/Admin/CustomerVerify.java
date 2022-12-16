@@ -11,7 +11,6 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -46,8 +45,8 @@ public class CustomerVerify extends JFrame implements MouseListener {
             model.addColumn(col);
         }
 
-        for(int i = 0; i < data.size();i++){
-            model.addRow(new String[] {data.get(i).getUsername(), data.get(i).getPassword(), data.get(i).getApprove()});
+        for (Customer datum : data) {
+            model.addRow(new String[]{datum.getUsername(), datum.getPassword(), datum.getApprove()});
         }
         temp_table.getTableHeader().setFont(new Font("Times New Roman", Font.BOLD, 14));
         return temp_table;
@@ -130,8 +129,9 @@ public class CustomerVerify extends JFrame implements MouseListener {
                 int selectedIndex = table1.getSelectedRow();
                 usernameString = usernameField.getText();
                 passwordString = passwordField.getText();
-                tempData.set(selectedIndex, new Customer(usernameString, passwordString, "No"));
-                System.out.println(tempData.get(selectedIndex).getPassword());
+                tempData.get(selectedIndex).setUsername(usernameString);
+                tempData.get(selectedIndex).setPassword(passwordString);
+                tempData.get(selectedIndex).setApprove("No");
                 saveData(data, customerDataFile);
                 saveData(tempData, tempCustomerDataFile, 1);
                 CustomerVerify verify  = new CustomerVerify();
@@ -145,10 +145,10 @@ public class CustomerVerify extends JFrame implements MouseListener {
             public void actionPerformed(ActionEvent e) {
                 int selectedIndex = table1.getSelectedRow();
                 tempData.remove(selectedIndex);
-                new CustomerVerify().setVisible(true);
-                JOptionPane.showMessageDialog(null, "Customer registration record deleted.", "Customer registration record delete", JOptionPane.INFORMATION_MESSAGE);
                 saveData(data, customerDataFile);
                 saveData(tempData, tempCustomerDataFile, 1);
+                new CustomerVerify().setVisible(true);
+                JOptionPane.showMessageDialog(null, "Customer registration record deleted.", "Customer registration record delete", JOptionPane.INFORMATION_MESSAGE);
                 dispose();
             }
         });
@@ -164,9 +164,9 @@ public class CustomerVerify extends JFrame implements MouseListener {
         usernameField.addKeyListener(new KeyAdapter() {
             @Override
             public void keyTyped(KeyEvent e) {
-                Character c  = e.getKeyChar();
+                char c  = e.getKeyChar();
                 Pattern punct = Pattern.compile("\\p{Punct}");
-                Matcher m = punct.matcher(c.toString());
+                Matcher m = punct.matcher(Character.toString(c));
                 if (m.find()){
                     JOptionPane.showMessageDialog(null, "Please enter valid character!");
                     e.consume();
@@ -179,8 +179,8 @@ public class CustomerVerify extends JFrame implements MouseListener {
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        int selectedIndex = 0;
-        DefaultTableModel model = new DefaultTableModel();
+        int selectedIndex;
+        DefaultTableModel model;
         model = (DefaultTableModel) table1.getModel();
         selectedIndex = table1.getSelectedRow();
 
@@ -196,7 +196,7 @@ public class CustomerVerify extends JFrame implements MouseListener {
     @Override
     public void mouseExited(MouseEvent e) {}
     private ArrayList<Customer> getData(File tempCustomerDataFile){
-        ArrayList<Customer> tempData = new ArrayList<Customer>();
+        ArrayList<Customer> tempData = new ArrayList<>();
         try {
             scanner = new Scanner(tempCustomerDataFile);
         } catch (FileNotFoundException e) {
@@ -215,7 +215,7 @@ public class CustomerVerify extends JFrame implements MouseListener {
     }
 
     private ArrayList<Customer> getData(File customerDataFile, int num){
-        ArrayList<Customer> tempData = new ArrayList<Customer>();
+        ArrayList<Customer> tempData = new ArrayList<>();
         try {
             scanner = new Scanner(customerDataFile);
         } catch (FileNotFoundException e) {
@@ -285,7 +285,4 @@ public class CustomerVerify extends JFrame implements MouseListener {
         return true;
     }
 
-    public static void main(String[] args){
-        new CustomerVerify();
-    }
 }

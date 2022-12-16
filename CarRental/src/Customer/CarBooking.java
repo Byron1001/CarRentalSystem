@@ -22,8 +22,7 @@ public class CarBooking extends JFrame{
     private JLabel fromLabel, toLabel, titleLabel;
     private JFormattedTextField fromField, toField;
     private String[] columns = {"Car Registration No.", "Make", "Model", "Available"};
-    private ArrayList<Object[]> data = null;
-    private Scanner scanner;
+    private ArrayList<Object[]> data;
     File carDataFile = new File("./CarRental/src/Data/Car Data.txt");
     File bookingHistoryFile = new File("./CarRental/src/Data/Booking History.txt");
     File loginHistoryFile = new File("./CarRental/src/Data/Login History.txt");

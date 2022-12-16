@@ -31,13 +31,13 @@ public class AdminMain extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 new CustomerRegistration().setVisible(true);
-                hide();
+                dispose();
             }
         });
         rentalButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                RentalManagement reg = null;
+                RentalManagement reg;
                 try {
                     reg = new RentalManagement();
                 } catch (ParseException ex) {

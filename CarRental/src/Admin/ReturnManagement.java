@@ -30,7 +30,6 @@ public class ReturnManagement extends JFrame{
     File bookingHistoryFile = new File("./CarRental/src/Data/Booking History.txt");
     File returnHistoryFile = new File("./CarRental/src/Data/Return History.txt");
     File paymentFile = new File("./CarRental/src/Data/Payment.txt");
-    String[] carColumns = {"Car Registration No", "Make", "Model", "Available"};
     String[] rentalColumns = {"Customer ID", "Car Registration No.", "Rental date", "Due Date", "Return Date", "Return", "Payment"};
 
     private static JTable createTable(ArrayList<Object[]> data, String[] columns){
@@ -42,8 +41,8 @@ public class ReturnManagement extends JFrame{
         };
         JTable tempTable = new JTable(model);
 
-        for (int i = 0; i < columns.length;i++){
-            model.addColumn(columns[i]);
+        for (String column : columns) {
+            model.addColumn(column);
         }
         for (Object[] i : data) {
             model.addRow(i);
@@ -165,7 +164,7 @@ public class ReturnManagement extends JFrame{
                         throw new RuntimeException(ex);
                     }
 
-                    ReturnManagement rental = null;
+                    ReturnManagement rental;
                     try {
                         rental = new ReturnManagement();
                     } catch (ParseException ex) {

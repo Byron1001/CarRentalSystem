@@ -19,7 +19,6 @@ public class CarReturn extends JFrame{
     private JFormattedTextField carIDField;
     private JButton returnButton;
     private JButton cancelButton;
-    private JPanel buttonPanel = new JPanel();
     private JPanel infoPanel = new JPanel();
     private JLabel carIDLabel;
     private JTable rentTable;
@@ -30,7 +29,6 @@ public class CarReturn extends JFrame{
     File returnHistoryFile = new File("./CarRental/src/Data/Return History.txt");
     File paymentFile = new File("./CarRental/src/Data/Payment.txt");
     File loginHistoryFile = new File("./CarRental/src/Data/Login History.txt");
-    String[] carColumns = {"Car Registration No", "Make", "Model", "Available"};
     String[] rentalColumns = {"Customer ID", "Car Registration No.", "Rental date", "Due Date", "Return Date"};
     String username;
 
@@ -43,11 +41,11 @@ public class CarReturn extends JFrame{
         };
         JTable tempTable = new JTable(model);
 
-        for (int i = 0; i < columns.length;i++){
-            model.addColumn(columns[i]);
+        for (String column : columns) {
+            model.addColumn(column);
         }
-        for (int i = 0; i < data.size();i++) {
-            model.addRow(data.get(i));
+        for (Object[] datum : data) {
+            model.addRow(datum);
         }
         TableColumnModel col = tempTable.getColumnModel();
         col.removeColumn(col.getColumn(0));
@@ -136,8 +134,7 @@ public class CarReturn extends JFrame{
         returnButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int selectedIndex = rentTable.getSelectedRow();
-                String username = rentData.get(selectedIndex)[0].toString();
+                int selectedCarIndex = getSelectedCarIndex(username, carIDField.getText(), rentalDateField.getText(), rentData);
                 Object[] rent = {username, carIDField.getText(), rentalDateField.getText(), dueDateField.getText(), returnDateField.getText(), "Yes", "No"};
                 int carIndex = getCarIndex(carIDField.getText(), carData);
                 Object[] car = carData.get(carIndex);
@@ -145,7 +142,7 @@ public class CarReturn extends JFrame{
                 carData.remove(carIndex);
                 carData.add(car);
 
-                rentData.remove(selectedIndex);
+                rentData.remove(selectedCarIndex);
                 returnData.add(rent);
                 saveData(rentData, bookingHistoryFile);
                 saveData(carData, carDataFile);
@@ -166,7 +163,7 @@ public class CarReturn extends JFrame{
                     throw new RuntimeException(ex);
                 }
 
-                CarReturn rental = null;
+                CarReturn rental;
                 try {
                     rental = new CarReturn();
                 } catch (ParseException ex) {
@@ -333,5 +330,14 @@ public class CarReturn extends JFrame{
         }
         return username;
     }
+
+    private int getSelectedCarIndex(String username, String carID, String rentalDate, ArrayList<Object[]> rentData){
+        for(Object[] dd : rentData){
+            if (username.equals(dd[0].toString()) && carID.equals(dd[1].toString()) && rentalDate.equals(dd[2].toString()))
+                return rentData.indexOf(dd);
+        }
+        return -1;
+    }
+
 
 }

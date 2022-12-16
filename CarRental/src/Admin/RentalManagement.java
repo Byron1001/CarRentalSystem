@@ -1,6 +1,5 @@
 package Admin;
 
-import javax.print.attribute.standard.JobKOctetsProcessed;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.MaskFormatter;
@@ -13,7 +12,6 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Scanner;
 
@@ -24,7 +22,6 @@ public class RentalManagement extends JFrame{
     private JButton rentButton;
     private JButton cancelButton;
     private JButton deleteButton;
-    private JPanel buttonPanel = new JPanel();
     private JPanel infoPanel = new JPanel();
     private JLabel customerIDLabel;
     private JLabel carIDLabel;
@@ -45,8 +42,8 @@ public class RentalManagement extends JFrame{
         };
         JTable tempTable = new JTable(model);
 
-        for (int i = 0; i < columns.length;i++){
-            model.addColumn(columns[i]);
+        for (String column : columns) {
+            model.addColumn(column);
         }
         for (Object[] i : data) {
             model.addRow(i);
@@ -187,7 +184,6 @@ public class RentalManagement extends JFrame{
                         rentData.add(data);
                         saveData(rentData, bookingHistoryFile);
 
-                        RentalManagement reg = null;
                         try {
                             new RentalManagement().setVisible(true);
                         } catch (ParseException ex) {
@@ -226,7 +222,7 @@ public class RentalManagement extends JFrame{
                         carData.add(car);
                         saveData(rentData, bookingHistoryFile);
                         saveData(carData, carDataFile);
-                        RentalManagement rental = null;
+                        RentalManagement rental;
                         try {
                             rental = new RentalManagement();
                         } catch (ParseException ex) {

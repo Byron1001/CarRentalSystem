@@ -7,7 +7,6 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Scanner;
 
 public class CustomerBookingHistory extends JFrame{
@@ -47,8 +46,8 @@ public class CustomerBookingHistory extends JFrame{
         mainPanel.add(new JLabel("Car Booking History"));
         mainPanel.add(new JLabel());
         for(String[] data : bookingHistoryData){
-            for (int i = 0; i < data.length;i++){
-                mainPanel.add(new JLabel(data[i]));
+            for (String datum : data) {
+                mainPanel.add(new JLabel(datum));
             }
             mainPanel.add(new JLabel());
         }
@@ -57,8 +56,8 @@ public class CustomerBookingHistory extends JFrame{
         mainPanel.add(new JLabel());
 
         for(String[] data : returnHistoryData){
-            for (int i = 0; i < data.length;i++){
-                mainPanel.add(new JLabel(data[i]));
+            for (String datum : data) {
+                mainPanel.add(new JLabel(datum));
             }
             mainPanel.add(new JLabel());
         }
@@ -67,8 +66,8 @@ public class CustomerBookingHistory extends JFrame{
         mainPanel.add(new JLabel("Payment made History"));
         mainPanel.add(new JLabel());
         for(String[] data : paymentHistoryData){
-            for (int i = 0; i < data.length;i++){
-                mainPanel.add(new JLabel(data[i]));
+            for (String datum : data) {
+                mainPanel.add(new JLabel(datum));
             }
             mainPanel.add(new JLabel());
         }
@@ -77,8 +76,8 @@ public class CustomerBookingHistory extends JFrame{
         mainPanel.add(new JLabel("Login History"));
         mainPanel.add(new JLabel());
         for(String[] data : loginHistoryData){
-            for (int i = 0; i < data.length;i++){
-                mainPanel.add(new JLabel(data[i]));
+            for (String datum : data) {
+                mainPanel.add(new JLabel(datum));
             }
             mainPanel.add(new JLabel());
         }
