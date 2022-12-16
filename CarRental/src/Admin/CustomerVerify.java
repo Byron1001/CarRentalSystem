@@ -1,9 +1,7 @@
 package Admin;
 
 import Customer.Customer;
-import Data.CustomerData;
 
-import javax.print.attribute.standard.JobKOctetsProcessed;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -133,11 +131,13 @@ public class CustomerVerify extends JFrame implements MouseListener {
                 usernameString = usernameField.getText();
                 passwordString = passwordField.getText();
                 tempData.set(selectedIndex, new Customer(usernameString, passwordString, "No"));
-                new CustomerVerify().setVisible(true);
-                JOptionPane.showMessageDialog(null, "Customer registration information modified", "Customer registration information modification", JOptionPane.INFORMATION_MESSAGE);
+                System.out.println(tempData.get(selectedIndex).getPassword());
                 saveData(data, customerDataFile);
                 saveData(tempData, tempCustomerDataFile, 1);
+                CustomerVerify verify  = new CustomerVerify();
+                verify.setVisible(true);
                 dispose();
+                JOptionPane.showMessageDialog(null, "Customer registration information modified", "Customer registration information modification", JOptionPane.INFORMATION_MESSAGE);
             }
         });
         deleteButton.addActionListener(new ActionListener() {
@@ -285,4 +285,7 @@ public class CustomerVerify extends JFrame implements MouseListener {
         return true;
     }
 
+    public static void main(String[] args){
+        new CustomerVerify();
+    }
 }

@@ -158,8 +158,8 @@ public class CarReturn extends JFrame{
                             "Rental date: " + rentalDateField.getText() + "\n" +
                             "Return date: " + returnDateField.getText() + "\n" +
                             "Due date: " + dueDateField.getText() + "\n" +
-                            "Your rental payment:" + payment[3] + "\n" +
-                            "Your fine payment:" + payment[4] + "\n";
+                            "Your rental payment:" + payment[5] + "\n" +
+                            "Your fine payment:" + payment[6] + "\n";
                     addPayment(payment);
                     JOptionPane.showMessageDialog(null, message, "Rental summary", JOptionPane.INFORMATION_MESSAGE);
                 } catch (ParseException ex) {
